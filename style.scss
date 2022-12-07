@@ -1,0 +1,187 @@
+$tw-color: red;
+$dw-color: pink;
+$dl-color: lightcyan;
+$tl-color: skyblue;
+$ct-color: $dw-color;
+
+$tile-num: 15;
+$tile-size: 32px;
+$tile-color: beige;
+$tile-border-color: white;
+$tile-border-width: 2px;
+$tile-font: bold 70%/1.5 "Open Sans", sans-serif;
+$decal-font-color: rgba(0,0,0,.6);
+
+$bg-color: white;
+$board-color: maroon;
+$board-border-color: darkred;
+$board-size: $tile-size * $tile-num;
+$board-border-width: round($board-size/80);
+
+$row-height-adj: $tile-size + $tile-border-width * 2;
+$board-size-adj: $board-size + $tile-border-width * ($tile-num * 2 + 1);
+
+@mixin coloredSquare($size, $color) {
+  width: $size;
+  height: $size;
+  background-color: $color;
+}
+
+@mixin tripleBorder($color) {
+  background: linear-gradient(-45deg, transparent 50%, $color 0),
+  linear-gradient(45deg, transparent 50%, $color 0),
+  linear-gradient(-135deg, transparent 50%, $color 0),
+  linear-gradient(135deg, transparent 50%, $color 0);
+  background-repeat: repeat-x;
+  background-position: 25% calc(100% + #{$tile-border-width}), 25% calc(100% + #{$tile-border-width}), 25% -#{$tile-border-width}, 25% -#{$tile-border-width};
+  background-size: (100% / 3) ($tile-border-width * 6);
+  width: 78%;
+  left: 11%;
+}
+
+@mixin doubleBorder($color) {
+  background: linear-gradient(-45deg, transparent 50%, $color 0),
+  linear-gradient(45deg, transparent 50%, $color 0),
+  linear-gradient(-135deg, transparent 50%, $color 0),
+  linear-gradient(135deg, transparent 50%, $color 0);
+  background-repeat: repeat-x;
+  background-position: 50% calc(100% + #{$tile-border-width}), 50% calc(100% + #{$tile-border-width}), 50% -#{$tile-border-width}, 50% -#{$tile-border-width};
+  background-size: (100% / 2) ($tile-border-width * 6);
+  width: 52%;
+  left: 24%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+body {
+  height: 100vh;
+  background: $bg-color;
+}
+
+
+#js-board {
+  @include coloredSquare($board-size-adj, $board-color);
+  min-width: $board-size-adj;
+  min-height: $board-size-adj;
+  border: outset $board-border-color $board-border-width;
+  margin: 40px auto;
+
+  .board {
+    background-color: $tile-border-color;
+    padding: $tile-border-width / 2;
+
+    .row {
+      height: $row-height-adj;
+
+      .tile {
+        @include coloredSquare($tile-size, $tile-color);
+        border: solid $tile-border-color $tile-border-width;
+        display: inline-block;
+        font: $tile-font;
+        color: $decal-font-color;
+
+        &::after {
+          @include coloredSquare(33%, transparent);
+          content: '0';
+          content: attr(data-value);
+          position: absolute;
+          bottom: 2px;
+          right: 3px;
+          font-size: 70%;
+          line-height: 140%;
+          text-align: right;
+          z-index: 999;
+        }
+
+        &.tile-ct {
+          background-color: $ct-color;
+          .decal::before {
+            content: '\2605';
+            font-size: 200%;
+          }
+        }
+
+        &.tile-dl, &.tile-dw, &.tile-tw, &.tile-tl {
+          .decal {
+            &::before, &::after {
+              content: '';
+              position: absolute;
+              top: -$tile-border-width * 2;
+              height: calc(100% + #{$tile-border-width} * 4);
+              z-index: 999;
+              transform: scaleX(0.7);
+            }
+            &::after {
+              transform: scaleY(0.7) rotate(90deg);
+            }
+          }
+        }
+
+        &.tile-dl {
+          background-color: $dl-color;
+          .decal {
+            &::before, &::after {
+              @include tripleBorder($dl-color);
+            }
+          }
+        }
+        &.tile-dw {
+          background-color: $dw-color;
+          .decal {
+            &::before, &::after {
+              @include tripleBorder($dw-color);
+            }
+          }
+        }
+        &.tile-tw {
+          background-color: $tw-color;
+          .decal {
+            &::before, &::after {
+              @include tripleBorder($tw-color);
+            }
+          }
+        }
+        &.tile-tl {
+          background-color: $tl-color;
+          .decal {
+            &::before, &::after {
+              @include tripleBorder($tl-color);
+            }
+          }
+        }
+
+        .decal {
+          @include coloredSquare(100%, transparent);
+          position: absolute;
+          text-align: center;
+          line-height: $tile-size;
+          text-transform: uppercase;
+          border-radius: 12%;
+          overflow: visible;
+          cursor: pointer;
+        }
+
+        input {
+          @extend .decal;
+          font-size: 150%;
+          text-align: left;
+          text-indent: 25%;
+          z-index: 999;
+          color: transparent;
+          &:focus {
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,.1),
+                    rgba(0,0,0,.1) 10px, rgba(0,0,0,0) 10px, rgba(0,0,0,0) 20px);
+          }
+          &.filled {
+            background-color: goldenrod;
+            text-shadow: 0px -1px 0px $decal-font-color;
+          }
+        }
+      }
+    }
+  }
+}
