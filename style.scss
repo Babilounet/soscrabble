@@ -1,20 +1,35 @@
-$tw-color: red;
-$dw-color: pink;
-$dl-color: lightcyan;
-$tl-color: skyblue;
-$ct-color: $dw-color;
+$tw-color-gradiant-up: #c97618;
+$tw-color-gradiant-down: #e79f44;
 
-$tile-num: 15;
-$tile-size: 32px;
-$tile-color: beige;
-$tile-border-color: white;
+$dw-color-gradiant-up: #8d312b;
+$dw-color-gradiant-down: #c96057;
+
+$dl-color-gradiant-up: #085b9d;
+$dl-color-gradiant-down: #138dd0;
+
+$tl-color-gradiant-up: #42722f;
+$tl-color-gradiant-down: #7bb460;
+
+$ct-color-gradiant-up: #392b44;
+$ct-color-gradiant-down: #745b88;
+
+$filled-color-gradiant-up : #f3d262;
+$filled-color-gradiant-down : #f0b73b;
+
+$tile-num: 11;
+$tile-size: 50px;
+$tile-color: #e6ebef;
+$tile-color-gradiant-up: #8fa0b3;
+$tile-color-gradiant-down: #e6ebef;
+$tile-border-color: #d5dfea;
 $tile-border-width: 2px;
 $tile-font: bold 70%/1.5 "Open Sans", sans-serif;
 $decal-font-color: rgba(0,0,0,.6);
 
-$bg-color: white;
-$board-color: maroon;
-$board-border-color: darkred;
+
+$bg-color: #282828;
+$board-color: #d5dfea;
+$board-border-color: black;
 $board-size: $tile-size * $tile-num;
 $board-border-width: round($board-size/80);
 
@@ -25,6 +40,12 @@ $board-size-adj: $board-size + $tile-border-width * ($tile-num * 2 + 1);
   width: $size;
   height: $size;
   background-color: $color;
+}
+
+@mixin gradiantSquare($size, $color-gradiant-up, $color-gradiant-down) {
+  width: $size;
+  height: $size;
+  background: linear-gradient($color-gradiant-up, 15%, $color-gradiant-down, 95%, $color-gradiant-up);
 }
 
 @mixin tripleBorder($color) {
@@ -62,7 +83,6 @@ body {
   background: $bg-color;
 }
 
-
 #js-board {
   @include coloredSquare($board-size-adj, $board-color);
   min-width: $board-size-adj;
@@ -78,11 +98,13 @@ body {
       height: $row-height-adj;
 
       .tile {
-        @include coloredSquare($tile-size, $tile-color);
+        @include gradiantSquare($tile-size, $tile-color-gradiant-up, $tile-color-gradiant-down);
+        box-shadow: inset 2px 2px 2px $tile-color-gradiant-up;
         border: solid $tile-border-color $tile-border-width;
         display: inline-block;
         font: $tile-font;
         color: $decal-font-color;
+        border-radius: $tile-size * 20 / 100;
 
         &::after {
           @include coloredSquare(33%, transparent);
@@ -98,10 +120,10 @@ body {
         }
 
         &.tile-ct {
-          background-color: $ct-color;
+          background: linear-gradient($ct-color-gradiant-up, 15%, $ct-color-gradiant-down, 95%, $ct-color-gradiant-up);
           .decal::before {
             content: '\2605';
-            font-size: 200%;
+            font-size: 150%;
           }
         }
 
@@ -122,36 +144,20 @@ body {
         }
 
         &.tile-dl {
-          background-color: $dl-color;
-          .decal {
-            &::before, &::after {
-              @include tripleBorder($dl-color);
-            }
-          }
+          box-shadow: inset 2px 2px 2px $dl-color-gradiant-up;
+          background: linear-gradient($dl-color-gradiant-up, 15%, $dl-color-gradiant-down, 95%, $dl-color-gradiant-up);
         }
         &.tile-dw {
-          background-color: $dw-color;
-          .decal {
-            &::before, &::after {
-              @include tripleBorder($dw-color);
-            }
-          }
+          box-shadow: inset 2px 2px 2px $dw-color-gradiant-up;
+          background: linear-gradient($dw-color-gradiant-up, 15%, $dw-color-gradiant-down, 95%, $dw-color-gradiant-up);
         }
         &.tile-tw {
-          background-color: $tw-color;
-          .decal {
-            &::before, &::after {
-              @include tripleBorder($tw-color);
-            }
-          }
+          box-shadow: inset 2px 2px 2px $tw-color-gradiant-up;
+          background: linear-gradient($tw-color-gradiant-up, 15%, $tw-color-gradiant-down, 95%, $tw-color-gradiant-up);
         }
         &.tile-tl {
-          background-color: $tl-color;
-          .decal {
-            &::before, &::after {
-              @include tripleBorder($tl-color);
-            }
-          }
+          box-shadow: inset 2px 2px 2px $tl-color-gradiant-up;
+          background: linear-gradient($tl-color-gradiant-up, 15%, $tl-color-gradiant-down, 95%, $tl-color-gradiant-up);
         }
 
         .decal {
@@ -163,6 +169,8 @@ body {
           border-radius: 12%;
           overflow: visible;
           cursor: pointer;
+          font-size: 135%;
+          font-weight: bold;
         }
 
         input {
@@ -177,7 +185,8 @@ body {
                     rgba(0,0,0,.1) 10px, rgba(0,0,0,0) 10px, rgba(0,0,0,0) 20px);
           }
           &.filled {
-            background-color: goldenrod;
+            box-shadow: inset 2px 2px 2px #ee972c;
+            background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
             text-shadow: 0px -1px 0px $decal-font-color;
           }
         }

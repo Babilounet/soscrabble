@@ -1,0 +1,119 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+
+body {
+  height: 100vh;
+  background: #282828;
+}
+
+#js-board {
+  width: 596px;
+  height: 596px;
+  background-color: #d5dfea;
+  min-width: 596px;
+  min-height: 596px;
+  border: outset black 7px;
+  margin: 40px auto;
+}
+#js-board .board {
+  background-color: #d5dfea;
+  padding: 1px;
+}
+#js-board .board .row {
+  height: 54px;
+}
+#js-board .board .row .tile {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
+  box-shadow: inset 2px 2px 2px #8fa0b3;
+  border: solid #d5dfea 2px;
+  display: inline-block;
+  font: bold 70%/1.5 "Open Sans", sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+#js-board .board .row .tile::after {
+  width: 33%;
+  height: 33%;
+  background-color: transparent;
+  content: "0";
+  content: attr(data-value);
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  font-size: 70%;
+  line-height: 140%;
+  text-align: right;
+  z-index: 999;
+}
+#js-board .board .row .tile.tile-ct {
+  background: linear-gradient(#392b44, 15%, #745b88, 95%, #392b44);
+}
+#js-board .board .row .tile.tile-ct .decal::before, #js-board .board .row .tile.tile-ct input::before {
+  content: "★";
+  font-size: 150%;
+}
+#js-board .board .row .tile.tile-dl .decal::before, #js-board .board .row .tile.tile-dl input::before, #js-board .board .row .tile.tile-dl .decal::after, #js-board .board .row .tile.tile-dl input::after, #js-board .board .row .tile.tile-dw .decal::before, #js-board .board .row .tile.tile-dw input::before, #js-board .board .row .tile.tile-dw .decal::after, #js-board .board .row .tile.tile-dw input::after, #js-board .board .row .tile.tile-tw .decal::before, #js-board .board .row .tile.tile-tw input::before, #js-board .board .row .tile.tile-tw .decal::after, #js-board .board .row .tile.tile-tw input::after, #js-board .board .row .tile.tile-tl .decal::before, #js-board .board .row .tile.tile-tl input::before, #js-board .board .row .tile.tile-tl .decal::after, #js-board .board .row .tile.tile-tl input::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  height: calc(100% + 2px * 4);
+  z-index: 999;
+  transform: scaleX(0.7);
+}
+#js-board .board .row .tile.tile-dl .decal::after, #js-board .board .row .tile.tile-dl input::after, #js-board .board .row .tile.tile-dw .decal::after, #js-board .board .row .tile.tile-dw input::after, #js-board .board .row .tile.tile-tw .decal::after, #js-board .board .row .tile.tile-tw input::after, #js-board .board .row .tile.tile-tl .decal::after, #js-board .board .row .tile.tile-tl input::after {
+  transform: scaleY(0.7) rotate(90deg);
+}
+#js-board .board .row .tile.tile-dl {
+  box-shadow: inset 2px 2px 2px #085b9d;
+  background: linear-gradient(#085b9d, 15%, #138dd0, 95%, #085b9d);
+}
+#js-board .board .row .tile.tile-dw {
+  box-shadow: inset 2px 2px 2px #8d312b;
+  background: linear-gradient(#8d312b, 15%, #c96057, 95%, #8d312b);
+}
+#js-board .board .row .tile.tile-tw {
+  box-shadow: inset 2px 2px 2px #c97618;
+  background: linear-gradient(#c97618, 15%, #e79f44, 95%, #c97618);
+}
+#js-board .board .row .tile.tile-tl {
+  box-shadow: inset 2px 2px 2px #42722f;
+  background: linear-gradient(#42722f, 15%, #7bb460, 95%, #42722f);
+}
+#js-board .board .row .tile .decal, #js-board .board .row .tile input {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  position: absolute;
+  text-align: center;
+  line-height: 50px;
+  text-transform: uppercase;
+  border-radius: 12%;
+  overflow: visible;
+  cursor: pointer;
+  font-size: 135%;
+  font-weight: bold;
+}
+#js-board .board .row .tile input {
+  font-size: 150%;
+  text-align: left;
+  text-indent: 25%;
+  z-index: 999;
+  color: transparent;
+}
+#js-board .board .row .tile input:focus {
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
+}
+#js-board .board .row .tile input.filled {
+  box-shadow: inset 2px 2px 2px #ee972c;
+  background: linear-gradient(#f3d262, 20%, #f0b73b);
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
+}
+
+/*# sourceMappingURL=style.css.map */

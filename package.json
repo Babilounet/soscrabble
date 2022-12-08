@@ -1,0 +1,23 @@
+{
+  "name": "crossword-solver",
+  "version": "1.0.0",
+  "description": "Simple crossword cheating tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss": "node-sass --watch scss -o css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Babilounet/crossword-solver.git"
+  },
+  "author": "Babilounet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Babilounet/crossword-solver/issues"
+  },
+  "homepage": "https://github.com/Babilounet/crossword-solver#readme",
+  "dependencies": {
+    "node-sass": "^8.0.0"
+  }
+}
