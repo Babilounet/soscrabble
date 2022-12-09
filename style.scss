@@ -1,5 +1,5 @@
 // Config
-$tile-num: 11; // Default board is 11x11
+$number-of-tile: 11; // Default board is 11x11
 $tile-size: 50px;
 
 // Triple word tiles
@@ -27,11 +27,14 @@ $filled-color-gradiant-up : #f3d262;
 $filled-color-gradiant-down : #f0b73b;
 
 // Default tile
-$tile-color: #e6ebef;
 $tile-color-gradiant-up: #8fa0b3;
 $tile-color-gradiant-down: #e6ebef;
+
+// Border between tiles
 $tile-border-color: #d5dfea;
 $tile-border-width: 2px;
+
+// Font & text
 $tile-font: bold 70%/1.5 "Open Sans", sans-serif;
 $decal-font-color: rgba(0,0,0,.6);
 
@@ -39,11 +42,11 @@ $decal-font-color: rgba(0,0,0,.6);
 $bg-color: #282828;
 $board-color: #d5dfea;
 $board-border-color: black;
-$board-size: $tile-size * $tile-num;
-$board-border-width: round($board-size/80);
 
-$row-height-adj: $tile-size + $tile-border-width * 2;
-$board-size-adj: $board-size + $tile-border-width * ($tile-num * 2 + 1);
+// Calculated values
+$board-border-width: round(($tile-size * $number-of-tile)/80);
+$row-height: $tile-size + $tile-border-width * 2;
+$board-size: ($tile-size * $number-of-tile) + $tile-border-width * ($number-of-tile * 2 + 1);
 
 @mixin coloredSquare($size, $color) {
   width: $size;
@@ -70,9 +73,9 @@ body {
 }
 
 #js-board {
-  @include coloredSquare($board-size-adj, $board-color);
-  min-width: $board-size-adj;
-  min-height: $board-size-adj;
+  @include coloredSquare($board-size, $board-color);
+  min-width: $board-size;
+  min-height: $board-size;
   border: outset $board-border-color $board-border-width;
   margin: 40px auto;
 
@@ -81,7 +84,7 @@ body {
     padding: $tile-border-width / 2;
 
     .row {
-      height: $row-height-adj;
+      height: $row-height;
 
       .tile {
         @include gradiantSquare($tile-size, $tile-color-gradiant-up, $tile-color-gradiant-down);
