@@ -1,23 +1,32 @@
+// Config
+$tile-num: 11; // Default board is 11x11
+$tile-size: 50px;
+
+// Triple word tiles
 $tw-color-gradiant-up: #c97618;
 $tw-color-gradiant-down: #e79f44;
 
+// Double word tiles
 $dw-color-gradiant-up: #8d312b;
 $dw-color-gradiant-down: #c96057;
 
-$dl-color-gradiant-up: #085b9d;
-$dl-color-gradiant-down: #138dd0;
-
+// Triple letter tiles
 $tl-color-gradiant-up: #42722f;
 $tl-color-gradiant-down: #7bb460;
 
+// Double letter tiles
+$dl-color-gradiant-up: #085b9d;
+$dl-color-gradiant-down: #138dd0;
+
+// Center tile
 $ct-color-gradiant-up: #392b44;
 $ct-color-gradiant-down: #745b88;
 
+// Tile filled with a letter
 $filled-color-gradiant-up : #f3d262;
 $filled-color-gradiant-down : #f0b73b;
 
-$tile-num: 11;
-$tile-size: 50px;
+// Default tile
 $tile-color: #e6ebef;
 $tile-color-gradiant-up: #8fa0b3;
 $tile-color-gradiant-down: #e6ebef;
@@ -26,7 +35,7 @@ $tile-border-width: 2px;
 $tile-font: bold 70%/1.5 "Open Sans", sans-serif;
 $decal-font-color: rgba(0,0,0,.6);
 
-
+// Page & Board
 $bg-color: #282828;
 $board-color: #d5dfea;
 $board-border-color: black;
@@ -48,36 +57,13 @@ $board-size-adj: $board-size + $tile-border-width * ($tile-num * 2 + 1);
   background: linear-gradient($color-gradiant-up, 15%, $color-gradiant-down, 95%, $color-gradiant-up);
 }
 
-@mixin tripleBorder($color) {
-  background: linear-gradient(-45deg, transparent 50%, $color 0),
-  linear-gradient(45deg, transparent 50%, $color 0),
-  linear-gradient(-135deg, transparent 50%, $color 0),
-  linear-gradient(135deg, transparent 50%, $color 0);
-  background-repeat: repeat-x;
-  background-position: 25% calc(100% + #{$tile-border-width}), 25% calc(100% + #{$tile-border-width}), 25% -#{$tile-border-width}, 25% -#{$tile-border-width};
-  background-size: (100% / 3) ($tile-border-width * 6);
-  width: 78%;
-  left: 11%;
-}
-
-@mixin doubleBorder($color) {
-  background: linear-gradient(-45deg, transparent 50%, $color 0),
-  linear-gradient(45deg, transparent 50%, $color 0),
-  linear-gradient(-135deg, transparent 50%, $color 0),
-  linear-gradient(135deg, transparent 50%, $color 0);
-  background-repeat: repeat-x;
-  background-position: 50% calc(100% + #{$tile-border-width}), 50% calc(100% + #{$tile-border-width}), 50% -#{$tile-border-width}, 50% -#{$tile-border-width};
-  background-size: (100% / 2) ($tile-border-width * 6);
-  width: 52%;
-  left: 24%;
-}
-
 * {
   margin: 0;
   padding: 0;
   border: none;
   position: relative;
 }
+
 body {
   height: 100vh;
   background: $bg-color;
@@ -108,7 +94,6 @@ body {
 
         &::after {
           @include coloredSquare(33%, transparent);
-          content: '0';
           content: attr(data-value);
           position: absolute;
           bottom: 2px;
