@@ -1,45 +1,51 @@
 // Config
 $number-of-tile: 11; // Default board is 11x11
-$tile-size: 50px;
+$tile-size: 40px;
 
 // Triple word tiles
-$tw-color-gradiant-up: #c97618;
-$tw-color-gradiant-down: #e79f44;
+$mt-color-gradiant-up: #c97618;
+$mt-color-gradiant-down: #e79f44;
 
 // Double word tiles
-$dw-color-gradiant-up: #8d312b;
-$dw-color-gradiant-down: #c96057;
+$md-color-gradiant-up: #8d312b;
+$md-color-gradiant-down: #c96057;
 
 // Triple letter tiles
-$tl-color-gradiant-up: #42722f;
-$tl-color-gradiant-down: #7bb460;
+$lt-color-gradiant-up: #42722f;
+$lt-color-gradiant-down: #7bb460;
 
 // Double letter tiles
-$dl-color-gradiant-up: #085b9d;
-$dl-color-gradiant-down: #138dd0;
+$ld-color-gradiant-up: #085b9d;
+$ld-color-gradiant-down: #138dd0;
 
 // Center tile
 $ct-color-gradiant-up: #392b44;
 $ct-color-gradiant-down: #745b88;
 
 // Tile filled with a letter
-$filled-color-gradiant-up : #f3d262;
-$filled-color-gradiant-down : #f0b73b;
+$filled-color-gradiant-up: #f3d262;
+$filled-color-gradiant-down: #f0b73b;
 
 // Default tile
 $tile-color-gradiant-up: #8fa0b3;
 $tile-color-gradiant-down: #e6ebef;
+
+// Header tile
+$header-color-gradiant-left: #0676c2;
+$header-color-gradiant-right: #004279;
 
 // Border between tiles
 $tile-border-color: #d5dfea;
 $tile-border-width: 2px;
 
 // Font & text
-$tile-font: bold 70%/1.5 "Open Sans", sans-serif;
-$decal-font-color: rgba(0,0,0,.6);
+$tile-font: bold 70%/1.5 "Helvetica Neue", sans-serif;
+$decal-font-color: rgba(0, 0, 0, .6);
+$font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$color-subtitle: #c5cbd1;
 
 // Page & Board
-$bg-color: #282828;
+$bg-color: #fff;
 $board-color: #d5dfea;
 $board-border-color: black;
 
@@ -65,28 +71,90 @@ $board-size: ($tile-size * $number-of-tile) + $tile-border-width * ($number-of-t
   padding: 0;
   border: none;
   position: relative;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: relative;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 
 body {
   height: 100vh;
   background: $bg-color;
+  font-family: $font-family-base;
 }
 
-#js-board {
+.header {
+  min-height: 180px;
+  background: linear-gradient(to right, $header-color-gradiant-left, 80%, $header-color-gradiant-right);
+
+  .logo-right {
+    background: url(../assets/logo-right.png) center 0 no-repeat;
+    background-size: 40%;
+    width: 676px;
+    height: 298px;
+    overflow: hidden;
+    position: absolute;
+    transform: rotate(20deg);
+    top: 20px;
+    left: 100%;
+    margin: 0 auto 0 -45%;
+  }
+
+  .scrabble-solver {
+    text-align: center;
+
+    h1 {
+      margin-top: 0;
+      font-weight: 900;
+      font-size: 70px;
+      padding-top: 20px;
+      color: #FFF;
+    }
+
+    small {
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 45px;
+      color: $color-subtitle;
+    }
+  }
+}
+
+#scrabble-board:before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  z-index: -1;
+  background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
+}
+
+#scrabble-board {
   @include coloredSquare($board-size, $board-color);
   min-width: $board-size;
   min-height: $board-size;
-  border: outset $board-border-color $board-border-width;
-  margin: 40px auto;
 
   .board {
-    background-color: $tile-border-color;
-    padding: $tile-border-width / 2;
-
     .row {
       height: $row-height;
+      margin: 0;
+      padding: 0;
 
       .tile {
+        margin: 0;
+        padding: 0;
         @include gradiantSquare($tile-size, $tile-color-gradiant-up, $tile-color-gradiant-down);
         box-shadow: inset 2px 2px 2px $tile-color-gradiant-up;
         border: solid $tile-border-color $tile-border-width;
@@ -109,13 +177,14 @@ body {
 
         &.tile-ct {
           background: linear-gradient($ct-color-gradiant-up, 15%, $ct-color-gradiant-down, 95%, $ct-color-gradiant-up);
+
           .decal::before {
             content: '\2605';
             font-size: 150%;
           }
         }
 
-        &.tile-dl, &.tile-dw, &.tile-tw, &.tile-tl {
+        &.tile-ld, &.tile-md, &.tile-mt, &.tile-lt {
           .decal {
             &::before, &::after {
               content: '';
@@ -125,27 +194,31 @@ body {
               z-index: 999;
               transform: scaleX(0.7);
             }
+
             &::after {
               transform: scaleY(0.7) rotate(90deg);
             }
           }
         }
 
-        &.tile-dl {
-          box-shadow: inset 2px 2px 2px $dl-color-gradiant-up;
-          background: linear-gradient($dl-color-gradiant-up, 15%, $dl-color-gradiant-down, 95%, $dl-color-gradiant-up);
+        &.tile-ld {
+          box-shadow: inset 2px 2px 2px $ld-color-gradiant-up;
+          background: linear-gradient($ld-color-gradiant-up, 15%, $ld-color-gradiant-down, 95%, $ld-color-gradiant-up);
         }
-        &.tile-dw {
-          box-shadow: inset 2px 2px 2px $dw-color-gradiant-up;
-          background: linear-gradient($dw-color-gradiant-up, 15%, $dw-color-gradiant-down, 95%, $dw-color-gradiant-up);
+
+        &.tile-md {
+          box-shadow: inset 2px 2px 2px $md-color-gradiant-up;
+          background: linear-gradient($md-color-gradiant-up, 15%, $md-color-gradiant-down, 95%, $md-color-gradiant-up);
         }
-        &.tile-tw {
-          box-shadow: inset 2px 2px 2px $tw-color-gradiant-up;
-          background: linear-gradient($tw-color-gradiant-up, 15%, $tw-color-gradiant-down, 95%, $tw-color-gradiant-up);
+
+        &.tile-mt {
+          box-shadow: inset 2px 2px 2px $mt-color-gradiant-up;
+          background: linear-gradient($mt-color-gradiant-up, 15%, $mt-color-gradiant-down, 95%, $mt-color-gradiant-up);
         }
-        &.tile-tl {
-          box-shadow: inset 2px 2px 2px $tl-color-gradiant-up;
-          background: linear-gradient($tl-color-gradiant-up, 15%, $tl-color-gradiant-down, 95%, $tl-color-gradiant-up);
+
+        &.tile-lt {
+          box-shadow: inset 2px 2px 2px $lt-color-gradiant-up;
+          background: linear-gradient($lt-color-gradiant-up, 15%, $lt-color-gradiant-down, 95%, $lt-color-gradiant-up);
         }
 
         .decal {
@@ -163,15 +236,17 @@ body {
 
         input {
           @extend .decal;
-          font-size: 150%;
-          text-align: left;
-          text-indent: 25%;
+          font-size: 190%;
+          text-align: center;
           z-index: 999;
           color: transparent;
+          top: 0;
+          left: 0;
+
           &:focus {
-            background: repeating-linear-gradient(45deg, rgba(0,0,0,.1),
-                    rgba(0,0,0,.1) 10px, rgba(0,0,0,0) 10px, rgba(0,0,0,0) 20px);
+            background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
           }
+
           &.filled {
             box-shadow: inset 2px 2px 2px #ee972c;
             background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
