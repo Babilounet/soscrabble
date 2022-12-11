@@ -4,98 +4,95 @@
   padding: 0;
   border: none;
   position: relative;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
-*:before,
-*:after {
-  margin: 0;
-  padding: 0;
-  border: none;
-  position: relative;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
 }
 
 body {
-  height: 100vh;
-  background: #fff;
+  background: linear-gradient(to right, #0676c2, 80%, #004279);
+  height: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
-.header {
+body .header {
+  width: 100%;
   min-height: 180px;
   background: linear-gradient(to right, #0676c2, 80%, #004279);
-}
-.header .logo-right {
-  background: url(../assets/logo-right.png) center 0 no-repeat;
-  background-size: 40%;
-  width: 676px;
-  height: 298px;
   overflow: hidden;
-  position: absolute;
-  transform: rotate(20deg);
-  top: 20px;
-  left: 100%;
-  margin: 0 auto 0 -45%;
+  padding-bottom: 50px;
+  margin-bottom: -30px;
 }
-.header .scrabble-solver {
+body .header .logo-right {
+  position: absolute;
+  left: 100%;
+  top: 30px;
+  width: 75%;
+  transform: rotate(20deg);
+  margin: 0 auto 0 -90%;
+}
+body .header .logo-left {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 75%;
+  transform: rotate(-10deg);
+  margin: 0 auto 0 20%;
+}
+body .header .scrabble-solver {
   text-align: center;
 }
-.header .scrabble-solver h1 {
+body .header .scrabble-solver h1 {
   margin-top: 0;
   font-weight: 900;
   font-size: 70px;
   padding-top: 20px;
   color: #FFF;
 }
-.header .scrabble-solver small {
+body .header .scrabble-solver small {
   font-weight: 700;
   font-size: 22px;
   line-height: 45px;
   color: #c5cbd1;
 }
-
-#scrabble-board:before {
+body .container {
+  background-color: #fff;
+}
+body .container h3 {
+  margin-bottom: 30px;
+}
+body .container #scrabble-board:before {
   content: "";
   position: absolute;
-  top: -10px;
-  bottom: -10px;
-  left: -10px;
-  right: -10px;
-  z-index: -1;
+  top: -20px;
+  bottom: -20px;
+  left: -20px;
+  right: -20px;
+  z-index: 0;
   background: repeating-linear-gradient(45deg, #0676c2 0px, #0676c2 20px, #2666ae 20px, #2666ae 40px);
 }
-
-#scrabble-board {
-  width: 486px;
-  height: 486px;
+body .container #scrabble-board {
+  width: 594px;
+  height: 594px;
   background-color: #d5dfea;
-  min-width: 486px;
-  min-height: 486px;
+  width: 594px;
+  height: 594px;
+  margin: auto;
 }
-#scrabble-board .board .row {
-  height: 44px;
-  margin: 0;
-  padding: 0;
+body .container #scrabble-board .scrabble-board {
+  background-color: #d5dfea;
 }
-#scrabble-board .board .row .tile {
-  margin: 0;
-  padding: 0;
-  width: 40px;
-  height: 40px;
+body .container #scrabble-board .scrabble-board .scrabble-row {
+  height: 54px;
+}
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile {
+  width: 54px;
+  height: 54px;
   background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
   box-shadow: inset 2px 2px 2px #8fa0b3;
   border: solid #d5dfea 2px;
   display: inline-block;
   font: bold 70%/1.5 "Helvetica Neue", sans-serif;
   color: rgba(0, 0, 0, 0.6);
-  border-radius: 8px;
+  border-radius: 10px;
 }
-#scrabble-board .board .row .tile::after {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile::after {
   width: 33%;
   height: 33%;
   background-color: transparent;
@@ -108,14 +105,14 @@ body {
   text-align: right;
   z-index: 999;
 }
-#scrabble-board .board .row .tile.tile-ct {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct {
   background: linear-gradient(#392b44, 15%, #745b88, 95%, #392b44);
 }
-#scrabble-board .board .row .tile.tile-ct .decal::before, #scrabble-board .board .row .tile.tile-ct input::before {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct .scrabble-decal::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct input::before {
   content: "★";
   font-size: 150%;
 }
-#scrabble-board .board .row .tile.tile-ld .decal::before, #scrabble-board .board .row .tile.tile-ld input::before, #scrabble-board .board .row .tile.tile-ld .decal::after, #scrabble-board .board .row .tile.tile-ld input::after, #scrabble-board .board .row .tile.tile-md .decal::before, #scrabble-board .board .row .tile.tile-md input::before, #scrabble-board .board .row .tile.tile-md .decal::after, #scrabble-board .board .row .tile.tile-md input::after, #scrabble-board .board .row .tile.tile-mt .decal::before, #scrabble-board .board .row .tile.tile-mt input::before, #scrabble-board .board .row .tile.tile-mt .decal::after, #scrabble-board .board .row .tile.tile-mt input::after, #scrabble-board .board .row .tile.tile-lt .decal::before, #scrabble-board .board .row .tile.tile-lt input::before, #scrabble-board .board .row .tile.tile-lt .decal::after, #scrabble-board .board .row .tile.tile-lt input::after {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::before, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::after {
   content: "";
   position: absolute;
   top: -4px;
@@ -123,32 +120,32 @@ body {
   z-index: 999;
   transform: scaleX(0.7);
 }
-#scrabble-board .board .row .tile.tile-ld .decal::after, #scrabble-board .board .row .tile.tile-ld input::after, #scrabble-board .board .row .tile.tile-md .decal::after, #scrabble-board .board .row .tile.tile-md input::after, #scrabble-board .board .row .tile.tile-mt .decal::after, #scrabble-board .board .row .tile.tile-mt input::after, #scrabble-board .board .row .tile.tile-lt .decal::after, #scrabble-board .board .row .tile.tile-lt input::after {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::after, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::after {
   transform: scaleY(0.7) rotate(90deg);
 }
-#scrabble-board .board .row .tile.tile-ld {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld {
   box-shadow: inset 2px 2px 2px #085b9d;
   background: linear-gradient(#085b9d, 15%, #138dd0, 95%, #085b9d);
 }
-#scrabble-board .board .row .tile.tile-md {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md {
   box-shadow: inset 2px 2px 2px #8d312b;
   background: linear-gradient(#8d312b, 15%, #c96057, 95%, #8d312b);
 }
-#scrabble-board .board .row .tile.tile-mt {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt {
   box-shadow: inset 2px 2px 2px #c97618;
   background: linear-gradient(#c97618, 15%, #e79f44, 95%, #c97618);
 }
-#scrabble-board .board .row .tile.tile-lt {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt {
   box-shadow: inset 2px 2px 2px #42722f;
   background: linear-gradient(#42722f, 15%, #7bb460, 95%, #42722f);
 }
-#scrabble-board .board .row .tile .decal, #scrabble-board .board .row .tile input {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile .scrabble-decal, body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
   width: 100%;
   height: 100%;
   background-color: transparent;
   position: absolute;
   text-align: center;
-  line-height: 40px;
+  line-height: 50px;
   text-transform: uppercase;
   border-radius: 12%;
   overflow: visible;
@@ -156,7 +153,7 @@ body {
   font-size: 135%;
   font-weight: bold;
 }
-#scrabble-board .board .row .tile input {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
   font-size: 190%;
   text-align: center;
   z-index: 999;
@@ -164,13 +161,113 @@ body {
   top: 0;
   left: 0;
 }
-#scrabble-board .board .row .tile input:focus {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input:focus {
   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
 }
-#scrabble-board .board .row .tile input.filled {
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled {
   box-shadow: inset 2px 2px 2px #ee972c;
   background: linear-gradient(#f3d262, 20%, #f0b73b);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
+}
+body .container #scrabble-rack:before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  bottom: -20px;
+  left: -20px;
+  right: -20px;
+  background: repeating-linear-gradient(45deg, #0676c2 0px, #0676c2 20px, #2666ae 20px, #2666ae 40px);
+}
+body .container #scrabble-rack {
+  width: 594px;
+  height: 594px;
+  background-color: #d5dfea;
+  width: 594px;
+  height: 82px;
+  margin: 30px auto 50px auto;
+  text-align: center;
+}
+body .container #scrabble-rack .scrabble-tile {
+  width: 82px;
+  height: 82px;
+  background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
+  box-shadow: inset 2px 2px 2px #8fa0b3;
+  display: inline-block;
+  font: bold 70%/1.5 "Helvetica Neue", sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  border-radius: 15.6px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+body .container #scrabble-rack .scrabble-tile::after {
+  width: 33%;
+  height: 33%;
+  background-color: transparent;
+  content: attr(data-value);
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  line-height: 140%;
+  text-align: right;
+  z-index: 999;
+}
+body .container #scrabble-rack .scrabble-tile .scrabble-decal, body .container #scrabble-rack .scrabble-tile input, body .container #scrabble-rack #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input, body .container #scrabble-board .scrabble-board .scrabble-row #scrabble-rack .scrabble-tile input {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  position: absolute;
+  text-align: center;
+  line-height: 78px;
+  text-transform: uppercase;
+  border-radius: 12%;
+  overflow: visible;
+  cursor: pointer;
+  font-size: 135%;
+  font-weight: bold;
+}
+body .container #scrabble-rack .scrabble-tile input {
+  font-size: 250%;
+  text-align: center;
+  z-index: 999;
+  color: transparent;
+  top: 0;
+  left: 0;
+}
+body .container #scrabble-rack .scrabble-tile input:focus {
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
+}
+body .container #scrabble-rack .scrabble-tile input.scrabble-filled {
+  box-shadow: inset 2px 2px 2px #ee972c;
+  background: linear-gradient(#f3d262, 20%, #f0b73b);
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
+}
+body .arrow {
+  position: absolute;
+  width: 50%;
+  top: 50px;
+  left: 0;
+}
+@media screen and (max-width: 990px) {
+  body .arrow {
+    display: none;
+  }
+}
+body .button-row {
+  padding-bottom: 75px;
+}
+body .button-row .btn-warning {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  font-size: 22px;
+  box-shadow: inset 2px 2px 2px #c97618;
+  background: linear-gradient(#c97618, 15%, #e79f44, 95%, #c97618);
+}
+body .button-row .btn-primary {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  font-size: 22px;
+  box-shadow: inset 2px 2px 2px #42722f;
+  background: linear-gradient(#42722f, 15%, #7bb460, 95%, #42722f);
 }
 
 /*# sourceMappingURL=style.css.map */

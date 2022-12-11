@@ -1,21 +1,10 @@
+import {ScrabbleTools} from "./ScrabbleTools.class.js";
+import {Tile} from "./Tile.class.js";
+
 export class ScrabbleBoard {
 
     constructor(sBoardElementId) {
         this.boardElement = document.getElementById(sBoardElementId);
-    }
-
-    // Score value for each letter
-    static get letterScores() {
-        return {
-            0: '?',
-            1: 'a,e,i,l,n,o,r,s,t,u',
-            2: 'd,g',
-            3: 'b,c,m,p',
-            4: 'f,h,v,w,y',
-            5: 'k',
-            8: 'j,x',
-            10: 'q,z'
-        };
     }
 
     // Position of the special tiles (center/triple-word/double-word/triple-letter/double-letter) - For a 11x11 Board
@@ -34,36 +23,49 @@ export class ScrabbleBoard {
         return 11;
     }
 
-    /**
-     * Search the score value of the given letter
-     * @param {string} sLetter
-     * @returns {number}
-     */
-    static getScoreByLetter(sLetter) {
-        const aScores = ScrabbleBoard.letterScores;
-        if (sLetter.length !== 1) {
-            return 0;
-        }
-        for (let iScore in aScores) {
-            if (aScores[iScore].indexOf(sLetter.toLowerCase()) >= 0) {
-                return iScore;
+    static getBoardAsArray() {
+        let aBoard = [];
+        for (let oRowElement of document.querySelector('.scrabble-board').children) {
+            let aRow = [];
+            for (let oTileElement of oRowElement.children) {
+                let sLetter = oTileElement.dataset.letter ? oTileElement.dataset.letter.toString().toUpperCase() : '';
+                let iRowNumber = parseInt(oTileElement.dataset.row);
+                let iColumnNumber = parseInt(oTileElement.dataset.column);
+                let iLetterMultiplier = parseInt(oTileElement.dataset.lettermultiplier);
+                let iWordMultiplier = parseInt(oTileElement.dataset.wordmultiplier);
+                aRow.push(new Tile(sLetter, iRowNumber, iColumnNumber, iLetterMultiplier, iWordMultiplier));
             }
+            aBoard.push(aRow);
         }
-        return 0;
+        return aBoard;
+    }
+
+    static saveBoardInLocalStorage(oEvent) {
+        localStorage.setItem('board', JSON.stringify(ScrabbleBoard.getBoardAsArray()));
+        document.querySelector('.save-check').classList.remove('invisible');
+    }
+
+    loadFromLocalStorage() {
+        const aStoredBoard = JSON.parse(localStorage.getItem('board'));
+        this.drawScrabbleBoard(aStoredBoard);
     }
 
     // Append scrabble board element
-    drawScrabbleBoard() {
+    drawScrabbleBoard(aStoredBoard = []) {
         const oScrabbleBoard = this;
         const iBoardSize = ScrabbleBoard.boardSize;
 
         let oBoardElement = document.createElement('div');
-        oBoardElement.classList.add('board');
+        oBoardElement.classList.add('scrabble-board');
         for (let iHorizontalCpt = 0; iHorizontalCpt < iBoardSize; iHorizontalCpt++) {
             let oRowElement = document.createElement('div');
-            oRowElement.classList.add('row');
+            oRowElement.classList.add('scrabble-row');
             for (let iVerticalCpt = 0; iVerticalCpt < iBoardSize; iVerticalCpt++) {
-                oRowElement.appendChild(oScrabbleBoard.getTileElement(iHorizontalCpt, iVerticalCpt));
+                if (typeof aStoredBoard[iHorizontalCpt] !== 'undefined' && typeof aStoredBoard[iHorizontalCpt][iVerticalCpt] !== 'undefined') {
+                    oRowElement.appendChild(oScrabbleBoard.getTileElement(iHorizontalCpt, iVerticalCpt, aStoredBoard[iHorizontalCpt][iVerticalCpt]));
+                } else {
+                    oRowElement.appendChild(oScrabbleBoard.getTileElement(iHorizontalCpt, iVerticalCpt));
+                }
             }
             oBoardElement.appendChild(oRowElement);
         }
@@ -74,16 +76,19 @@ export class ScrabbleBoard {
      * Build the tile html element from row and column id
      * @param {int} iHorizontalId
      * @param {int} iVerticalId
+     * @param {array} aStoredTile
      * @returns {HTMLDivElement}
      */
-    getTileElement(iHorizontalId, iVerticalId) {
+    getTileElement(iHorizontalId, iVerticalId, aStoredTile = []) {
         let oTileElement = document.createElement('div');
-        oTileElement.classList.add('tile');
+        oTileElement.classList.add('scrabble-tile');
         oTileElement.dataset.row = iHorizontalId.toString();
         oTileElement.dataset.column = iVerticalId.toString();
+        oTileElement.dataset.lettermultiplier = '1';
+        oTileElement.dataset.wordmultiplier = '1';
 
         let oDecalElement = document.createElement('div');
-        oDecalElement.classList.add('decal');
+        oDecalElement.classList.add('scrabble-decal');
 
         let oInputElement = document.createElement('input');
         oInputElement.maxLength = 1;
@@ -97,12 +102,14 @@ export class ScrabbleBoard {
             // Alphabet
             if (iKeyCode >= 65 && iKeyCode <= 90) {
                 oSelectedInput.setAttribute('value', sKeyLetter);
-                oSelectedInput.classList.add('filled');
-                oSelectedInput.parentElement.dataset.value = ScrabbleBoard.getScoreByLetter(sKeyLetter).toString();
+                oSelectedInput.classList.add('scrabble-filled');
+                oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
+                oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (iKeyCode === 8 || iKeyCode === 46) {
-                oSelectedInput.classList.remove('filled');
+                oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
+                delete oSelectedInput.parentElement.dataset.letter;
             }
 
             return true;
@@ -111,11 +118,33 @@ export class ScrabbleBoard {
         const iBoardIndex = iHorizontalId * ScrabbleBoard.boardSize + iVerticalId;
         for (let sSpecialTileType in ScrabbleBoard.specialTilePositionIndex) {
             if (ScrabbleBoard.specialTilePositionIndex[sSpecialTileType].indexOf(iBoardIndex) >= 0) {
-                oTileElement.classList.add('tile-' + sSpecialTileType);
+                oTileElement.classList.add('scrabble-tile-' + sSpecialTileType);
                 if (sSpecialTileType !== 'ct') {
                     oDecalElement.innerHTML = sSpecialTileType.toUpperCase();
                 }
+                switch (sSpecialTileType) {
+                    case 'mt' :
+                        oTileElement.dataset.wordmultiplier = '3';
+                        break;
+                    case 'md':
+                        oTileElement.dataset.wordmultiplier = '2';
+                        break;
+                    case 'lt':
+                        oTileElement.dataset.lettermultiplier = '3';
+                        break;
+                    case 'ld':
+                        oTileElement.dataset.lettermultiplier = '2';
+                        break;
+                }
             }
+        }
+
+        const sStoredLetter = (aStoredTile && typeof aStoredTile['letter'] !== 'undefined') ? aStoredTile['letter'] : '';
+        if (sStoredLetter) {
+            oInputElement.setAttribute('value', sStoredLetter);
+            oInputElement.classList.add('scrabble-filled');
+            oTileElement.dataset.value = ScrabbleTools.getScoreByLetter(sStoredLetter).toString();
+            oTileElement.dataset.letter = sStoredLetter;
         }
 
         oTileElement.appendChild(oDecalElement);
@@ -123,4 +152,5 @@ export class ScrabbleBoard {
 
         return oTileElement;
     }
+
 }
