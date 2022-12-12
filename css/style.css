@@ -169,6 +169,10 @@ body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile inp
   background: linear-gradient(#f3d262, 20%, #f0b73b);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
 }
+body .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move {
+  box-shadow: inset 2px 2px 2px #688f22;
+  background: linear-gradient(#a8f362, 20%, #93ce34);
+}
 body .container #scrabble-rack:before {
   content: "";
   position: absolute;
@@ -184,7 +188,7 @@ body .container #scrabble-rack {
   background-color: #d5dfea;
   width: 594px;
   height: 82px;
-  margin: 30px auto 50px auto;
+  margin: 31px auto 50px auto;
   text-align: center;
 }
 body .container #scrabble-rack .scrabble-tile {
@@ -240,6 +244,10 @@ body .container #scrabble-rack .scrabble-tile input.scrabble-filled {
   box-shadow: inset 2px 2px 2px #ee972c;
   background: linear-gradient(#f3d262, 20%, #f0b73b);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
+}
+body .container #scrabble-rack .scrabble-tile input.scrabble-filled.best-move {
+  box-shadow: inset 2px 2px 2px #688f22;
+  background: linear-gradient(#a8f362, 20%, #93ce34);
 }
 body .arrow {
   position: absolute;

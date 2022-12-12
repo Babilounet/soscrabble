@@ -2,7 +2,6 @@ import {TrieTree} from "./TrieTree.class.js";
 import {ScrabbleTools} from "./ScrabbleTools.class.js";
 import {ScrabbleRack} from "./ScrabbleRack.class.js";
 import {ScrabbleBoard} from "./ScrabbleBoard.class.js";
-import * as _ from "../node_modules/lodash/lodash.js";
 
 export class Solver {
 
@@ -17,13 +16,17 @@ export class Solver {
 
     findBestMove() {
         this.board = ScrabbleBoard.getBoardAsArray();
+        console.log(this.board);
         this.rack = ScrabbleRack.getRackAsArray()
         for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
             this.across_check(iCpt);
             this.down_check(iCpt);
         }
         this.generate_moves();
-        console.log(this);
+        if (this.best_move) {
+            ScrabbleBoard.drawBoardBestMove(this.best_move);
+            ScrabbleRack.drawRackBestMove(this.best_move);
+        }
     }
 
     compute_score_already_placed(cells_played) {
@@ -93,7 +96,7 @@ export class Solver {
             // Update the across sum by adding the points for the suffix and prefix
             this.board[row][cellKey].horizontalSum = this.compute_score_already_placed(prefix_cell) + this.compute_score_already_placed(suffix_cell);
             // Update the across check for the cell
-            this.dictionary.update_across_check(prefix, suffix, cell);
+            this.update_across_check(prefix, suffix, cell);
 
         }
     }
@@ -160,7 +163,57 @@ export class Solver {
             // Update the down sum using the prefix and suffix
             this.board[rowKey][col].verticalSum = this.compute_score_already_placed(prefix_cell) + this.compute_score_already_placed(suffix_cell);
             // Update the down check
-            this.dictionary.update_down_check(prefix, suffix, cell);
+            this.update_down_check(prefix, suffix, cell);
+        }
+    }
+
+    update_across_check(prefix, suffix, tile) {
+        // Use the prefix to iterate through the trie
+        let curr_node = this.dictionary.root;
+        for (let letter of prefix) {
+            curr_node = curr_node.children[letter];
+        }
+
+        // Check all possible letters to see if they can make valid across checks
+        for (let letter of ScrabbleTools.getAlphabet()) {
+            // Remove if the letter is not a child of the current node
+            if (!(letter in curr_node.children)) {
+                if (tile.horizontalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
+                }
+                continue;
+            }
+            // Remove if that letter does not form a valid word
+            if (!this.dictionary.valid_word(suffix, curr_node.children[letter])) {
+                if (tile.horizontalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
+                }
+            }
+        }
+    }
+
+    update_down_check(prefix, suffix, tile) {
+        // Use the prefix to iterate through the trie
+        let curr_node = this.dictionary.root;
+        for (let letter of prefix) {
+            curr_node = curr_node.children[letter];
+        }
+
+        // Check all possible letters to see if they can make valid down checks
+        for (let letter of ScrabbleTools.getAlphabet()) {
+            // Remove if the letter is not a child of the current node
+            if (!(letter in curr_node.children)) {
+                if (tile.verticalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
+                }
+                continue;
+            }
+            // Remove if that letter does not form a valid word
+            if (!this.dictionary.valid_word(suffix, curr_node.children[letter])) {
+                if (tile.verticalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
+                }
+            }
         }
     }
 
@@ -193,12 +246,11 @@ export class Solver {
 
                 let rowNumber = tile.rowNumber;
                 let columnNumber = tile.columnNumber;
-                let curr_cell = board[rowNumber][columnNumber - 1];
+                let curr_cell = board[rowNumber][columnNumber];
 
                 let partial_word = [];
 
                 if (curr_cell.letter) {
-                    columnNumber -= 1;
                     while (curr_cell.letter) {
                         partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
                         if (columnNumber === 0) {
@@ -228,12 +280,11 @@ export class Solver {
 
                 rowNumber = tile.rowNumber;
                 columnNumber = tile.columnNumber;
-                curr_cell = board[rowNumber - 1][columnNumber];
+                curr_cell = board[rowNumber][columnNumber];
 
                 partial_word = [];
 
                 if (curr_cell.letter) {
-                    rowNumber -= 1;
                     while (curr_cell.letter) {
                         partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
                         if (rowNumber === 0) {
@@ -273,7 +324,7 @@ export class Solver {
 
         if (limit > 0) {
             for (let letter in node.children) {
-                if (letter in rack) {
+                if (rack.indexOf(letter) !== -1) {
                     let child = node.children[letter];
                     rack.splice(rack.indexOf(child.letter), 1);
 
@@ -285,15 +336,15 @@ export class Solver {
                             partial_word[iOffsetCpt][2] = columnNumber - (partial_word.length - iOffsetCpt);
                         }
                     } else {
-                        partial_word.append([letter, rowNumber - 1, columnNumber])
+                        partial_word.push([letter, rowNumber - 1, columnNumber])
                         for (let iOffsetCpt = 0; iOffsetCpt < partial_word.length; iOffsetCpt++) {
-                            partial_word[iOffsetCpt][1] = rowNumber - partial_word.length - iOffsetCpt;
+                            partial_word[iOffsetCpt][1] = rowNumber - (partial_word.length - iOffsetCpt);
                         }
                     }
 
                     this.generate_prefix(partial_word, limit - 1, rack, anchor, orientation, child)
                     partial_word.pop()
-                    rack.append(child.letter)
+                    rack.push(child.letter)
                 }
             }
         }
@@ -309,23 +360,23 @@ export class Solver {
                     }
                 }
             }
-        } else if (tile.letter === null) {
+        } else if (tile.letter === null || tile.letter === '') {
             if (node.terminate) {
                 for (let letter of partial_word) {
-                    if (this.board[letter[1]][letter[2]].anchor) {
+                    if (this.board[letter[1]][letter[2]].isAnchor) {
                         this.evaluate_move(partial_word);
                         break;
                     }
                 }
             }
 
-            for (let letter of node.children) {
-                if (letter in rack) {
+            for (let letter in node.children) {
+                if (rack.indexOf(letter) !== -1) {
                     if (orientation === 'A') {
-                        if (!(letter in tile.verticalAvailableLetters)) {
+                        if (tile.verticalAvailableLetters.indexOf(letter) === -1) {
                             continue;
                         }
-                    } else if (!(letter in tile.horizontalAvailableLetters)) {
+                    } else if (tile.horizontalAvailableLetters.indexOf(letter) === -1) {
                         continue;
                     }
 
@@ -373,18 +424,18 @@ export class Solver {
             return cell.letter in cell.verticalAvailableLetters && cell.letter in cell.horizontalAvailableLetters;
         }
 
-        let word = []
+        let word = [];
         if (cells_played[0].rowNumber === cells_played[1].rowNumber) {
             for (let cell of cells_played) {
                 word.push(cell.letter)
-                if (!(cell.letter in cell.verticalAvailableLetters)) {
+                if (cell.verticalAvailableLetters.indexOf(cell.letter) === -1) {
                     return false;
                 }
             }
         } else {
             for (let cell of cells_played) {
                 word.push(cell.letter)
-                if (!(cell.letter in cell.horizontalAvailableLetters)) {
+                if (cell.horizontalAvailableLetters.indexOf(cell.letter) === -1) {
                     return false;
                 }
             }

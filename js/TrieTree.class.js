@@ -1,5 +1,4 @@
 import {Node} from "./Node.class.js";
-import {ScrabbleTools} from "./ScrabbleTools.class.js";
 
 export class TrieTree {
     constructor(sDictionaryFilePath) {
@@ -16,7 +15,7 @@ export class TrieTree {
                 currNode = currNode.children[letter];
                 not_found = false;
             }
-            
+
             if (not_found) {
                 let newNode = new Node(letter, false);
                 currNode.children[letter] = newNode;
@@ -53,56 +52,6 @@ export class TrieTree {
         }
     }
 
-    update_down_check(prefix, suffix, tile) {
-        // Use the prefix to iterate through the trie
-        let curr_node = this.root;
-        for (let letter of prefix) {
-            curr_node = curr_node.children[letter];
-        }
-
-        // Check all possible letters to see if they can make valid down checks
-        for (let letter of ScrabbleTools.getAlphabet()) {
-            // Remove if the letter is not a child of the current node
-            if (!(letter in curr_node.children)) {
-                if (tile.verticalAvailableLetters.includes(letter)) {
-                    tile.verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
-                }
-                continue;
-            }
-            // Remove if that letter does not form a valid word
-            if (!this.valid_word(suffix, curr_node.children[letter])) {
-                if (letter in tile.verticalAvailableLetters) {
-                    tile.verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
-                }
-            }
-        }
-    }
-
-    update_across_check(prefix, suffix, tile) {
-        // Use the prefix to iterate through the trie
-        let curr_node = this.root;
-        for (let letter of prefix) {
-            curr_node = curr_node.children[letter];
-        }
-
-        // Check all possible letters to see if they can make valid across checks
-        for (let letter of ScrabbleTools.getAlphabet()) {
-            // Remove if the letter is not a child of the current node
-            if (!(letter in curr_node.children)) {
-                if (letter in tile.horizontalAvailableLetters) {
-                    tile.horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
-                }
-                continue;
-            }
-            // Remove if that letter does not form a valid word
-            if (!this.valid_word(suffix, curr_node.children[letter])) {
-                if (letter in tile.horizontalAvailableLetters) {
-                    tile.horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
-                }
-            }
-        }
-    }
-
     valid_word(word, root = null) {
         let curr_node = root ? root : this.root;
 
@@ -130,6 +79,7 @@ export class TrieTree {
 
         // Check that the last node has terminate
         let letter = word[word.length - 1];
+
         // for child in curr_node.children:
         return (letter in curr_node.children && curr_node.children[letter].terminate);
     }

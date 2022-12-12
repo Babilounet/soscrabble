@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         oScrabbleRack.drawScrabbleRack();
     }
 
-    let oSolver = new Solver('dictionaries/dictionary-en.txt');
+    let oSolver = new Solver('dictionaries/dictionary-fr.txt');
 
     document.querySelector('#save-board').addEventListener('click', ScrabbleTools.saveDataInLocalStorage);
     document.querySelector('#find-best-move').addEventListener('click', function () {

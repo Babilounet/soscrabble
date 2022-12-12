@@ -24,6 +24,20 @@ export class ScrabbleRack {
         localStorage.setItem('rack', JSON.stringify(ScrabbleRack.getRackAsArray()));
     }
 
+    static drawRackBestMove(aBestMove) {
+        let aRackElements = document.querySelector('.scrabble-rack').children;
+        for (let aMove of aBestMove) {
+            for (let oRackElement of aRackElements) {
+                if (oRackElement.dataset.letter === aMove[0] && !oRackElement.classList.contains('best-move')) {
+                    let oRackInput = oRackElement.querySelector('input');
+                    oRackInput.classList.add('best-move');
+                    oRackElement.classList.add('best-move');
+                    break;
+                }
+            }
+        }
+    }
+
     loadFromLocalStorage() {
         const aStoredRack = JSON.parse(localStorage.getItem('rack'));
         this.drawScrabbleRack(aStoredRack);

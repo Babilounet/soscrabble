@@ -45,6 +45,20 @@ export class ScrabbleBoard {
         document.querySelector('.save-check').classList.remove('invisible');
     }
 
+    static drawBoardBestMove(aBestMove) {
+        for (let aMove of aBestMove) {
+            let oTileElement = document.querySelector('.scrabble-board').children[aMove[1]].children[aMove[2]];
+            if (typeof oTileElement.dataset.letter === 'undefined') {
+                let oSelectedInput = oTileElement.querySelector('input');
+                oSelectedInput.setAttribute('value', aMove[0]);
+                oSelectedInput.classList.add('scrabble-filled');
+                oSelectedInput.classList.add('best-move');
+                oTileElement.dataset.value = ScrabbleTools.getScoreByLetter(aMove[0]).toString();
+                oTileElement.dataset.letter = aMove[0];
+            }
+        }
+    }
+
     loadFromLocalStorage() {
         const aStoredBoard = JSON.parse(localStorage.getItem('board'));
         this.drawScrabbleBoard(aStoredBoard);
@@ -107,6 +121,7 @@ export class ScrabbleBoard {
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (iKeyCode === 8 || iKeyCode === 46) {
+                oSelectedInput.removeAttribute('value');
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;

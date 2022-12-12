@@ -26,6 +26,10 @@ $ct-color-gradiant-down: #745b88;
 $filled-color-gradiant-up: #f3d262;
 $filled-color-gradiant-down: #f0b73b;
 
+// Tile autofilled with a best-move letter
+$filled-best-move-color-gradiant-up: #a8f362;
+$filled-best-move-color-gradiant-down: #93ce34;
+
 // Default tile
 $tile-color-gradiant-up: #8fa0b3;
 $tile-color-gradiant-down: #e6ebef;
@@ -258,6 +262,11 @@ body {
                 box-shadow: inset 2px 2px 2px #ee972c;
                 background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
                 text-shadow: 0px -1px 0px $decal-font-color;
+
+                &.best-move {
+                  box-shadow: inset 2px 2px 2px #688f22;
+                  background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
+                }
               }
             }
           }
@@ -279,7 +288,7 @@ body {
       @include coloredSquare($board-size, $board-color);
       width: $board-size;
       height: $final-rack-tile-size-with-border;
-      margin: 30px auto 50px auto;
+      margin: 31px auto 50px auto;
       text-align: center;
 
       .scrabble-tile {
@@ -333,6 +342,11 @@ body {
             box-shadow: inset 2px 2px 2px #ee972c;
             background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
             text-shadow: 0px -1px 0px $decal-font-color;
+
+            &.best-move {
+              box-shadow: inset 2px 2px 2px #688f22;
+              background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
+            }
           }
         }
       }
