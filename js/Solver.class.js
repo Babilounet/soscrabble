@@ -16,18 +16,27 @@ export class Solver {
     }
 
     findBestMove() {
-        this.board = ScrabbleBoard.getBoardAsArray();
+        this.best_moves = [];
+        this.best_move = [];
+        this.best_score = 1;
+        this.board = ScrabbleBoard.resetAnchorsAndAvailableLetter(ScrabbleBoard.getBoardAsArray());
         this.rack = ScrabbleRack.getRackAsArray()
         for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
             this.across_check(iCpt);
             this.down_check(iCpt);
         }
+
         this.generate_moves();
         if (this.best_move) {
             ScrabbleBoard.drawBoardBestMove(this.best_move);
             ScrabbleRack.drawRackBestMove(this.best_move);
+            console.log(this);
+            this.board = ScrabbleBoard.resetAnchorsAndAvailableLetter(ScrabbleBoard.getBoardAsArray());
+            for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
+                this.across_check(iCpt);
+                this.down_check(iCpt);
+            }
         }
-        console.log(this);
     }
 
     compute_score_already_placed(cells_played) {
@@ -204,23 +213,6 @@ export class Solver {
         }
     }
 
-    cross_checks_sums(cells_played) {
-        if (cells_played.length === 1) {
-            this.down_check(cells_played[0].columnNumber);
-            this.across_check(cells_played[0].rowNumber);
-        } else if (cells_played[0].rowNumber === cells_played[1].rowNumber) {
-            this.across_check(cells_played[0].rowNumber);
-            for (let cell in cells_played) {
-                this.down_check(cell.columnNumber);
-            }
-        } else {
-            this.down_check(cells_played[0].columnNumber);
-            for (let cell in cells_played) {
-                this.across_check(cell.rowNumber);
-            }
-        }
-    }
-
     generate_moves() {
         let trie = this.dictionary;
         let board = this.board;
@@ -231,72 +223,79 @@ export class Solver {
                     continue;
                 }
 
-                let rowNumber = tile.rowNumber;
-                let columnNumber = tile.columnNumber;
-                let curr_cell = board[rowNumber][columnNumber];
+                this.log = tile.rowNumber === 4 && tile.columnNumber === 8;
 
-                let partial_word = [];
+                if (tile.columnNumber > 0) {
+                    let rowNumber = tile.rowNumber;
+                    let columnNumber = tile.columnNumber - 1;
+                    let curr_cell = board[rowNumber][columnNumber];
 
-                if (curr_cell.letter) {
-                    while (curr_cell.letter) {
-                        partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
-                        if (columnNumber === 0) {
-                            break;
+                    let partial_word = [];
+
+                    if (curr_cell.letter) {
+                        while (curr_cell.letter) {
+                            partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
+                            if (columnNumber === 0) {
+                                break;
+                            }
+                            columnNumber -= 1;
+                            curr_cell = board[rowNumber][columnNumber];
                         }
-                        columnNumber -= 1;
-                        curr_cell = board[rowNumber][columnNumber];
-                    }
-                    partial_word = partial_word.reverse();
+                        partial_word = partial_word.reverse();
 
-                    let node = trie.root;
-                    for (let item of partial_word) {
-                        node = node.children[item[0]];
-                    }
+                        let node = trie.root;
+                        for (let item of partial_word) {
+                            node = node.children[item[0]];
+                        }
 
-                    this.generate_suffix(partial_word, rack, tile, "A", node);
-                } else {
-                    let limit = 0;
-                    while (!curr_cell.isAnchor && columnNumber > 0 && limit < 8) {
-                        limit += 1;
-                        columnNumber -= 1;
-                        curr_cell = board[rowNumber][columnNumber];
-                    }
+                        this.generate_suffix(partial_word, rack, tile, "A", node);
+                    } else {
+                        let limit = 0;
+                        while (!curr_cell.isAnchor && columnNumber > 0 && limit < 11) {
+                            limit += 1;
+                            columnNumber -= 1;
+                            curr_cell = board[rowNumber][columnNumber];
+                        }
 
-                    this.generate_prefix([], limit - 1, rack, tile, "A");
+                        this.generate_prefix([], limit - 1, rack, tile, "A");
+                    }
                 }
 
-                rowNumber = tile.rowNumber;
-                columnNumber = tile.columnNumber;
-                curr_cell = board[rowNumber][columnNumber];
 
-                partial_word = [];
+                if (tile.rowNumber > 0) {
+                    let rowNumber = tile.rowNumber - 1;
+                    let columnNumber = tile.columnNumber;
+                    let curr_cell = board[rowNumber][columnNumber];
+                    let partial_word = [];
 
-                if (curr_cell.letter) {
-                    while (curr_cell.letter) {
-                        partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
-                        if (rowNumber === 0) {
-                            break;
+                    if (curr_cell.letter) {
+                        while (curr_cell.letter) {
+                            partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
+                            if (rowNumber === 0) {
+                                break;
+                            }
+                            rowNumber -= 1;
+                            curr_cell = board[rowNumber][columnNumber];
                         }
-                        rowNumber -= 1;
-                        curr_cell = board[rowNumber][columnNumber];
-                    }
 
-                    partial_word.reverse();
+                        partial_word.reverse();
 
-                    let node = trie.root;
-                    for (let item of partial_word) {
-                        node = node.children[item[0]];
-                    }
+                        let node = trie.root;
+                        for (let item of partial_word) {
+                            node = node.children[item[0]];
+                        }
 
-                    this.generate_suffix(partial_word, rack, tile, "D", node);
-                } else {
-                    let limit = 0;
-                    while (!curr_cell.isAnchor && rowNumber > 0 && limit < 11) {
-                        limit += 1;
-                        rowNumber -= 1;
-                        curr_cell = board[rowNumber][columnNumber];
+                        this.generate_suffix(partial_word, rack, tile, "D", node);
+                    } else {
+                        let limit = 0;
+                        while (!curr_cell.isAnchor && rowNumber > 0 && limit < 11) {
+                            limit += 1;
+                            rowNumber -= 1;
+                            curr_cell = board[rowNumber][columnNumber];
+                        }
+
+                        this.generate_prefix([], limit, rack, tile, "D");
                     }
-                    this.generate_prefix([], limit - 1, rack, tile, "D");
                 }
             }
         }
@@ -306,7 +305,6 @@ export class Solver {
         if (!node) {
             node = this.dictionary.root;
         }
-
         this.generate_suffix(partial_word, rack, anchor, orientation, node);
 
         if (limit > 0) {
@@ -338,13 +336,39 @@ export class Solver {
     }
 
     generate_suffix(partial_word, rack, tile, orientation, node) {
-        if (tile.rowNumber > ScrabbleBoard.boardSize - 2 || tile.columnNumber > ScrabbleBoard.boardSize - 2) {
+        if (tile.rowNumber >= ScrabbleBoard.boardSize - 1 || tile.columnNumber >= ScrabbleBoard.boardSize - 1) {
             if (node.terminate) {
                 for (let letter of partial_word) {
                     if (this.board[letter[1]][letter[2]].isAnchor) {
                         this.evaluate_move(partial_word);
                         break;
                     }
+                }
+            }
+
+            for (let letter in node.children) {
+                if (rack.indexOf(letter) !== -1) {
+                    if (orientation === 'A') {
+                        if (tile.verticalAvailableLetters.indexOf(letter) === -1) {
+                            continue;
+                        }
+                    } else if (tile.horizontalAvailableLetters.indexOf(letter) === -1) {
+                        continue;
+                    }
+
+                    rack.splice(rack.indexOf(letter), 1);
+                    partial_word.push([letter, tile.rowNumber, tile.columnNumber]);
+
+                    if (node.children[letter].terminate) {
+                        for (let letter of partial_word) {
+                            if (this.board[letter[1]][letter[2]].isAnchor) {
+                                this.evaluate_move(partial_word);
+                                break;
+                            }
+                        }
+                    }
+                    partial_word.pop();
+                    rack.push(letter);
                 }
             }
         } else if (tile.letter === null || tile.letter === '') {
@@ -381,7 +405,7 @@ export class Solver {
             }
         } else {
             if (tile.letter in node.children) {
-                partial_word.push([tile.letter, tile.rowNumber, tile.columnNumber])
+                partial_word.push([tile.letter, tile.rowNumber, tile.columnNumber]);
                 let row = tile.rowNumber;
                 let col = tile.columnNumber;
                 let curr_cell = orientation === 'A' ? this.board[row][col + 1] : this.board[row + 1][col];
@@ -483,19 +507,72 @@ export class Solver {
         let score = this.compute_score(move_cell);
 
         if (score > this.best_score) {
-            this.best_moves.push({'move' : _.cloneDeep(this.best_move).slice(), 'score' : score});
+            if (!this.check_all_formed_words(move)) {
+                return;
+            }
+            this.best_moves.push({'move': _.cloneDeep(this.best_move).slice(), 'score': score});
             this.best_score = score
             this.best_move = _.cloneDeep(move).slice();
         }
     }
 
-    best_move_cell() {
-        let move_cell = [];
-        for (let letter of this.best_move) {
-            this.board[letter[1]][letter[2]].letter = letter[0];
-            move_cell.push(this.board[letter[1]][letter[2]]);
+    check_all_formed_words(move) {
+        let aValidationBoard = _.cloneDeep(this.board).slice();
+        for (let aMove of move) {
+            if (aValidationBoard[aMove[1]][aMove[2]].letter === '') {
+                aValidationBoard[aMove[1]][aMove[2]].letter = aMove[0];
+            }
+        }
+        let aFoundWords = [];
+        let iConsecutiveLetter = 0;
+        let sWord = '';
+        for (let iValidationRowNumber = 0; iValidationRowNumber < ScrabbleBoard.boardSize; iValidationRowNumber++) {
+            for (let iValidationColumnNumber = 0; iValidationColumnNumber < ScrabbleBoard.boardSize; iValidationColumnNumber++) {
+                if (aValidationBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                    iConsecutiveLetter++;
+                    sWord += aValidationBoard[iValidationRowNumber][iValidationColumnNumber].letter;
+                } else {
+                    if (iConsecutiveLetter > 1) {
+                        aFoundWords.push(sWord);
+                    }
+                    sWord = '';
+                    iConsecutiveLetter = 0;
+                }
+            }
+            if (iConsecutiveLetter > 1) {
+                aFoundWords.push(sWord);
+            }
+            sWord = '';
+            iConsecutiveLetter = 0;
         }
 
-        return move_cell;
+        for (let iValidationColumnNumber = 0; iValidationColumnNumber < ScrabbleBoard.boardSize; iValidationColumnNumber++) {
+            for (let iValidationRowNumber = 0; iValidationRowNumber < ScrabbleBoard.boardSize; iValidationRowNumber++) {
+                if (aValidationBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                    iConsecutiveLetter++;
+                    sWord += aValidationBoard[iValidationRowNumber][iValidationColumnNumber].letter;
+                } else {
+                    if (iConsecutiveLetter > 1) {
+                        aFoundWords.push(sWord);
+                    }
+                    sWord = '';
+                    iConsecutiveLetter = 0;
+                }
+            }
+            if (iConsecutiveLetter > 1) {
+                aFoundWords.push(sWord);
+            }
+            sWord = '';
+            iConsecutiveLetter = 0;
+        }
+
+        for (let sValidationWord of aFoundWords) {
+            if (!this.dictionary.valid_word(sValidationWord)) {
+                return false;
+            }
+        }
+
+        console.log(aFoundWords);
+        return true;
     }
 }

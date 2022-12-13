@@ -59,6 +59,21 @@ export class ScrabbleBoard {
         }
     }
 
+    static resetAnchorsAndAvailableLetter(aBoard) {
+        let aResetBoard = [];
+        for (let aRow of aBoard) {
+            let aResetRow = [];
+            for (let oTile of aRow) {
+                oTile.isAnchor = false;
+                oTile.horizontalAvailableLetters = ScrabbleTools.getAlphabet();
+                oTile.verticalAvailableLetters = ScrabbleTools.getAlphabet();
+                aResetRow.push(oTile);
+            }
+            aResetBoard.push(aResetRow);
+        }
+        return aResetBoard;
+    }
+
     loadFromLocalStorage() {
         const aStoredBoard = JSON.parse(localStorage.getItem('board'));
         this.drawScrabbleBoard(aStoredBoard);
