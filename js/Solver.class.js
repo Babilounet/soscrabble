@@ -9,6 +9,7 @@ export class Solver {
         this.board = [];
         this.rack = [];
         this.dictionary = new TrieTree(sDictionaryFilePath);
+        this.best_moves = [];
         this.best_move = [];
         this.best_score = 1;
 
@@ -16,7 +17,6 @@ export class Solver {
 
     findBestMove() {
         this.board = ScrabbleBoard.getBoardAsArray();
-        console.log(this.board);
         this.rack = ScrabbleRack.getRackAsArray()
         for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
             this.across_check(iCpt);
@@ -27,6 +27,7 @@ export class Solver {
             ScrabbleBoard.drawBoardBestMove(this.best_move);
             ScrabbleRack.drawRackBestMove(this.best_move);
         }
+        console.log(this);
     }
 
     compute_score_already_placed(cells_played) {
@@ -178,15 +179,8 @@ export class Solver {
         for (let letter of ScrabbleTools.getAlphabet()) {
             // Remove if the letter is not a child of the current node
             if (!(letter in curr_node.children)) {
-                if (tile.horizontalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
-                }
-                continue;
-            }
-            // Remove if that letter does not form a valid word
-            if (!this.dictionary.valid_word(suffix, curr_node.children[letter])) {
-                if (tile.horizontalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(tile.horizontalAvailableLetters.indexOf(letter), 1);
+                if (this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.indexOf(letter), 1);
                 }
             }
         }
@@ -203,15 +197,8 @@ export class Solver {
         for (let letter of ScrabbleTools.getAlphabet()) {
             // Remove if the letter is not a child of the current node
             if (!(letter in curr_node.children)) {
-                if (tile.verticalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
-                }
-                continue;
-            }
-            // Remove if that letter does not form a valid word
-            if (!this.dictionary.valid_word(suffix, curr_node.children[letter])) {
-                if (tile.verticalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(tile.verticalAvailableLetters.indexOf(letter), 1);
+                if (this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.indexOf(letter), 1);
                 }
             }
         }
@@ -301,15 +288,15 @@ export class Solver {
                         node = node.children[item[0]];
                     }
 
-                    this.generate_suffix(partial_word, rack, tile, "D", node)
+                    this.generate_suffix(partial_word, rack, tile, "D", node);
                 } else {
-                    let limit = 0
-                    while (!curr_cell.isAnchor && rowNumber > 0 && limit < 8) {
-                        limit += 1
-                        rowNumber -= 1
-                        curr_cell = board[rowNumber][columnNumber]
+                    let limit = 0;
+                    while (!curr_cell.isAnchor && rowNumber > 0 && limit < 11) {
+                        limit += 1;
+                        rowNumber -= 1;
+                        curr_cell = board[rowNumber][columnNumber];
                     }
-                    this.generate_prefix([], limit - 1, rack, tile, "D")
+                    this.generate_prefix([], limit - 1, rack, tile, "D");
                 }
             }
         }
@@ -342,9 +329,9 @@ export class Solver {
                         }
                     }
 
-                    this.generate_prefix(partial_word, limit - 1, rack, anchor, orientation, child)
-                    partial_word.pop()
-                    rack.push(child.letter)
+                    this.generate_prefix(partial_word, limit - 1, rack, anchor, orientation, child);
+                    partial_word.pop();
+                    rack.push(child.letter);
                 }
             }
         }
@@ -496,6 +483,7 @@ export class Solver {
         let score = this.compute_score(move_cell);
 
         if (score > this.best_score) {
+            this.best_moves.push({'move' : _.cloneDeep(this.best_move).slice(), 'score' : score});
             this.best_score = score
             this.best_move = _.cloneDeep(move).slice();
         }

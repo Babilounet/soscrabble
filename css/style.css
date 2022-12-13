@@ -44,6 +44,7 @@ body .header .scrabble-solver h1 {
   font-size: 70px;
   padding-top: 20px;
   color: #FFF;
+  z-index: 1;
 }
 body .header .scrabble-solver small {
   font-weight: 700;
