@@ -9,303 +9,308 @@ export class Solver {
         this.board = [];
         this.rack = [];
         this.dictionary = new TrieTree(sDictionaryFilePath);
-        this.best_moves = [];
-        this.best_move = [];
-        this.best_score = 1;
+        this.bestMoves = [];
+        this.bestMove = [];
+        this.bestScore = 1;
 
     }
 
     findBestMove() {
-        this.best_moves = [];
-        this.best_move = [];
-        this.best_score = 1;
+        this.bestMoves = [];
+        this.bestMove = [];
+        this.bestScore = 1;
         this.board = ScrabbleBoard.resetAnchorsAndAvailableLetter(ScrabbleBoard.getBoardAsArray());
         this.rack = ScrabbleRack.getRackAsArray()
         for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
-            this.across_check(iCpt);
-            this.down_check(iCpt);
+            this.checkHorizontalValuesByRowNumber(iCpt);
+            this.checkVerticalValuesByColumnNumber(iCpt);
         }
 
-        this.generate_moves();
-        if (this.best_move) {
-            ScrabbleBoard.drawBoardBestMove(this.best_move);
-            ScrabbleRack.drawRackBestMove(this.best_move);
+        this.generateBestMoves();
+        if (this.bestMove) {
+            ScrabbleBoard.drawBoardBestMove(this.bestMove);
+            ScrabbleRack.drawRackBestMove(this.bestMove);
             console.log(this);
             this.board = ScrabbleBoard.resetAnchorsAndAvailableLetter(ScrabbleBoard.getBoardAsArray());
             for (let iCpt = 0; iCpt < ScrabbleBoard.boardSize; iCpt++) {
-                this.across_check(iCpt);
-                this.down_check(iCpt);
+                this.checkHorizontalValuesByRowNumber(iCpt);
+                this.checkVerticalValuesByColumnNumber(iCpt);
             }
         }
     }
 
-    compute_score_already_placed(cells_played) {
-        let score = 0;
-        for (let cell of cells_played) {
-            score += ScrabbleTools.getScoreByLetter(cell.letter);
+    calculateScoreForGivenTiles(aTiles) {
+        let iScore = 0;
+        for (let aTile of aTiles) {
+            iScore += ScrabbleTools.getScoreByLetter(aTile.letter);
         }
-        return score;
+        return iScore;
     }
 
-    across_check(row) {
-        for (let cellKey in this.board[row]) {
-            let cell = this.board[row][cellKey];
-            this.board[row][cellKey].horizontalAvailableLetters = ScrabbleTools.getAlphabet();
+    checkHorizontalValuesByRowNumber(iRowNumber) {
+        for (let iColumnNumber in this.board[iRowNumber]) {
+            let oTile = this.board[iRowNumber][iColumnNumber];
+            this.board[iRowNumber][iColumnNumber].horizontalAvailableLetters = ScrabbleTools.getAlphabet();
 
-            // If the letter is already placed then skip
-            if (cell.letter) {
+            // Skip the tile already containing letters
+            if (oTile.letter) {
                 continue;
             }
-            let prefix_row = cell.rowNumber;
-            let prefix_col = cell.columnNumber;
 
-            // Build the prefix of all the words before this letter
-            let prefix = [];
-            let prefix_cell = [];
-            while (prefix_col > 0) {
-                prefix_col -= 1;
-                let cur_cell = this.board[prefix_row][prefix_col];
-                if (cur_cell.letter) {
-                    prefix.push(cur_cell.letter);
-                    prefix_cell.push(cur_cell);
+            // Prefix is all the placed letters before our tile
+            let iPrefixRowNumber = oTile.rowNumber;
+            let iPrefixColumnNumber = oTile.columnNumber;
+            let sPrefix = '';
+            let aPrefixTiles = [];
+            while (iPrefixColumnNumber > 0) {
+                iPrefixColumnNumber -= 1;
+                let oCurrentTile = this.board[iPrefixRowNumber][iPrefixColumnNumber];
+                if (oCurrentTile.letter) {
+                    sPrefix += oCurrentTile.letter.toUpperCase();
+                    aPrefixTiles.push(oCurrentTile);
                 } else {
                     break;
                 }
             }
 
-            prefix.reverse()
+            // Reverse the string to have the prefix in the right order
+            sPrefix = [...sPrefix].reverse().join('');
 
-            // Build the suffix of all letters after this one
-            let suffix_row = cell.rowNumber;
-            let suffix_col = cell.columnNumber;
-            let suffix = [];
-            let suffix_cell = [];
-            while (suffix_col < ScrabbleBoard.boardSize - 1) {
-                suffix_col += 1;
-                let cur_cell = this.board[suffix_row][suffix_col];
-                if (cur_cell.letter) {
-                    suffix.push(cur_cell.letter);
-                    suffix_cell.push(cur_cell);
+            // The suffix if all the placed letters after our tile
+            let iSuffixRowNumber = oTile.rowNumber;
+            let iSuffixColumnNumber = oTile.columnNumber;
+            let sSuffix = '';
+            let aSuffixTiles = [];
+            while (iSuffixColumnNumber < ScrabbleBoard.boardSize - 1) {
+                iSuffixColumnNumber += 1;
+                let oCurrentTile = this.board[iSuffixRowNumber][iSuffixColumnNumber];
+                if (oCurrentTile.letter) {
+                    sSuffix += oCurrentTile.letter.toUpperCase();
+                    aSuffixTiles.push(oCurrentTile);
                 } else {
                     break;
                 }
             }
 
-            prefix = prefix.join('').toUpperCase();
-            suffix = suffix.join('').toUpperCase();
-
-            // If their are no letters to the left or right then no letters need to be removed from
-            // the across_check
-            if (prefix === '' && suffix === '') {
+            // No surrounding letters, go to next tile
+            if (sPrefix === '' && sSuffix === '') {
                 continue;
             }
 
-            // Cell is empty but adjacent to a placed tile so it can be the start of a new word
-            this.board[row][cellKey].isAnchor = true;
+            // At least one adjacent tile is filled, mark the tile as a possible anchor for a new word
+            this.board[iRowNumber][iColumnNumber].isAnchor = true;
 
             // Update the across sum by adding the points for the suffix and prefix
-            this.board[row][cellKey].horizontalSum = this.compute_score_already_placed(prefix_cell) + this.compute_score_already_placed(suffix_cell);
-            // Update the across check for the cell
-            this.update_across_check(prefix, suffix, cell);
+            this.board[iRowNumber][iColumnNumber].horizontalSum = this.calculateScoreForGivenTiles(aPrefixTiles) + this.calculateScoreForGivenTiles(aSuffixTiles);
 
+            // Update the possible available letters of this tile
+            this.updateHorizontalAvailableLetters(sPrefix, oTile);
         }
     }
 
-    down_check(col) {
-        for (let rowKey in this.board) {
-            let cell = this.board[rowKey][col];
+    checkVerticalValuesByColumnNumber(iColumnNumber) {
+        for (let iRowNumber in this.board) {
+            let oTile = this.board[iRowNumber][iColumnNumber];
 
-            this.board[rowKey][col].verticalAvailableLetters = ScrabbleTools.getAlphabet();
+            // Reset Available letters
+            this.board[iRowNumber][iColumnNumber].verticalAvailableLetters = ScrabbleTools.getAlphabet();
 
             // If the letter is already placed then skip it
-            if (cell.letter) {
+            if (oTile.letter) {
                 continue;
             }
 
-            let prefix_row = cell.rowNumber;
-            let prefix_col = cell.columnNumber;
-
-            // Build the prefix of the letter above the current cell
-            let prefix = [];
-            let prefix_cell = [];
-            while (prefix_row > 0) {
-                prefix_row -= 1
-                let cur_cell = this.board[prefix_row][prefix_col];
-                if (cur_cell.letter) {
-                    prefix.push(cur_cell.letter);
-                    prefix_cell.push(cur_cell);
+            // Prefix is all the placed letters before our tile
+            let iPrefixRowNumber = oTile.rowNumber;
+            let iPrefixColumnNumber = oTile.columnNumber;
+            let sPrefix = '';
+            let aPrefixTiles = [];
+            while (iPrefixRowNumber > 0) {
+                iPrefixRowNumber -= 1
+                let oCurrentTile = this.board[iPrefixRowNumber][iPrefixColumnNumber];
+                if (oCurrentTile.letter) {
+                    sPrefix += oCurrentTile.letter.toUpperCase();
+                    aPrefixTiles.push(oCurrentTile);
                 } else {
                     break;
                 }
             }
 
-            prefix.reverse()
+            // Reverse the string to have the prefix in the right order
+            sPrefix = [...sPrefix].reverse().join('');
 
-            // Build the suffix of the letter below the current cell
-            let suffix_row = cell.rowNumber;
-            let suffix_col = cell.columnNumber;
-            let suffix = [];
-            let suffix_cell = [];
-
-            while (suffix_row < ScrabbleBoard.boardSize - 1) {
-                suffix_row += 1;
-                let cur_cell = this.board[suffix_row][suffix_col];
-                if (cur_cell.letter) {
-                    suffix.push(cur_cell.letter);
-                    suffix_cell.push(cur_cell);
+            // The suffix if all the placed letters after our tile
+            let iSuffixRowNumber = oTile.rowNumber;
+            let iSuffixColumnNumber = oTile.columnNumber;
+            let sSuffix = '';
+            let aSuffixTiles = [];
+            while (iSuffixRowNumber < ScrabbleBoard.boardSize - 1) {
+                iSuffixRowNumber += 1;
+                let oCurrentTile = this.board[iSuffixRowNumber][iSuffixColumnNumber];
+                if (oCurrentTile.letter) {
+                    sSuffix += oCurrentTile.letter.toUpperCase();
+                    aSuffixTiles.push(oCurrentTile);
                 } else {
                     break;
                 }
             }
 
-            prefix = prefix.join('').toUpperCase();
-            suffix = suffix.join('').toUpperCase();
-
-            // If the cell has nothing above or below it then no need to remove letter
-            // from the down_check
-            if (prefix === '' && suffix === '') {
+            // No surrounding letters, go to next tile
+            if (sPrefix === '' && sSuffix === '') {
                 continue;
             }
 
-            // Cell is empty but adjacent to a placed tile so it canbe the start of a new word
-            this.board[rowKey][col].isAnchor = true;
+            // At least one adjacent tile is filled, mark the tile as a possible anchor for a new word
+            this.board[iRowNumber][iColumnNumber].isAnchor = true;
 
-            // Update the down sum using the prefix and suffix
-            this.board[rowKey][col].verticalSum = this.compute_score_already_placed(prefix_cell) + this.compute_score_already_placed(suffix_cell);
-            // Update the down check
-            this.update_down_check(prefix, suffix, cell);
+            // Update the across sum by adding the points for the suffix and prefix
+            this.board[iRowNumber][iColumnNumber].verticalSum = this.calculateScoreForGivenTiles(aPrefixTiles) + this.calculateScoreForGivenTiles(aSuffixTiles);
+            
+            // Update the possible available letters of this tile
+            this.updateVerticalAvailableLetters(sPrefix, oTile);
         }
     }
 
-    update_across_check(prefix, suffix, tile) {
+    updateHorizontalAvailableLetters(sPrefix, oTile) {
         // Use the prefix to iterate through the trie
-        let curr_node = this.dictionary.root;
-        for (let letter of prefix) {
-            curr_node = curr_node.children[letter];
+        let oCurrentNode = this.dictionary.root;
+        for (let sLetter of sPrefix) {
+            oCurrentNode = oCurrentNode.children[sLetter];
         }
 
-        // Check all possible letters to see if they can make valid across checks
-        for (let letter of ScrabbleTools.getAlphabet()) {
-            // Remove if the letter is not a child of the current node
-            if (!(letter in curr_node.children)) {
-                if (this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.splice(this.board[tile.rowNumber][tile.columnNumber].horizontalAvailableLetters.indexOf(letter), 1);
+        // Check all possible letters to see if they can continue the prefix horizontally
+        for (let sLetter of ScrabbleTools.getAlphabet()) {
+            if (!(sLetter in oCurrentNode.children)) {
+                if (this.board[oTile.rowNumber][oTile.columnNumber].horizontalAvailableLetters.indexOf(sLetter) !== -1) {
+                    this.board[oTile.rowNumber][oTile.columnNumber].horizontalAvailableLetters.splice(this.board[oTile.rowNumber][oTile.columnNumber].horizontalAvailableLetters.indexOf(sLetter), 1);
                 }
             }
         }
     }
 
-    update_down_check(prefix, suffix, tile) {
+    updateVerticalAvailableLetters(sPrefix, oTile) {
         // Use the prefix to iterate through the trie
-        let curr_node = this.dictionary.root;
-        for (let letter of prefix) {
-            curr_node = curr_node.children[letter];
+        let oCurrentNode = this.dictionary.root;
+        for (let sLetter of sPrefix) {
+            oCurrentNode = oCurrentNode.children[sLetter];
         }
 
-        // Check all possible letters to see if they can make valid down checks
+        // Check all possible letters to see if they can continue the prefix vertically
         for (let letter of ScrabbleTools.getAlphabet()) {
-            // Remove if the letter is not a child of the current node
-            if (!(letter in curr_node.children)) {
-                if (this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.indexOf(letter) !== -1) {
-                    this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.splice(this.board[tile.rowNumber][tile.columnNumber].verticalAvailableLetters.indexOf(letter), 1);
+            if (!(letter in oCurrentNode.children)) {
+                if (this.board[oTile.rowNumber][oTile.columnNumber].verticalAvailableLetters.indexOf(letter) !== -1) {
+                    this.board[oTile.rowNumber][oTile.columnNumber].verticalAvailableLetters.splice(this.board[oTile.rowNumber][oTile.columnNumber].verticalAvailableLetters.indexOf(letter), 1);
                 }
             }
         }
     }
 
-    generate_moves() {
-        let trie = this.dictionary;
-        let board = this.board;
-        let rack = this.rack;
-        for (let row of board) {
-            for (let tile of row) {
-                if (!tile.isAnchor) {
+    generateBestMoves() {
+        let oTrieTree = this.dictionary;
+        let aBoard = this.board;
+        let aRack = this.rack;
+
+        // Parsing the board by row then by column
+        for (let aRow of aBoard) {
+            for (let oTile of aRow) {
+                // Available tiles for new words are marked as anchors
+                if (!oTile.isAnchor) {
                     continue;
                 }
 
-                this.log = tile.rowNumber === 4 && tile.columnNumber === 8;
+                // If the current tile is not against the left border
+                if (oTile.columnNumber > 0) {
+                    let rowNumber = oTile.rowNumber;
+                    let columnNumber = oTile.columnNumber - 1;
+                    let oCurrentTile = aBoard[rowNumber][columnNumber];
 
-                if (tile.columnNumber > 0) {
-                    let rowNumber = tile.rowNumber;
-                    let columnNumber = tile.columnNumber - 1;
-                    let curr_cell = board[rowNumber][columnNumber];
-
-                    let partial_word = [];
-
-                    if (curr_cell.letter) {
-                        while (curr_cell.letter) {
-                            partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
-                            if (columnNumber === 0) {
+                    let aPartialWord = [];
+                    // If there are letters on the left, we retrieve them and try to build a "suffix" to extend the word
+                    if (oCurrentTile.letter) {
+                        while (oCurrentTile.letter) {
+                            aPartialWord.push([oCurrentTile.letter, oCurrentTile.rowNumber, oCurrentTile.columnNumber]);
+                            if (columnNumber <= 0) {
                                 break;
                             }
                             columnNumber -= 1;
-                            curr_cell = board[rowNumber][columnNumber];
+                            oCurrentTile = aBoard[rowNumber][columnNumber];
                         }
-                        partial_word = partial_word.reverse();
+                        aPartialWord = aPartialWord.reverse();
 
-                        let node = trie.root;
-                        for (let item of partial_word) {
-                            node = node.children[item[0]];
+                        let oCurrentNode = oTrieTree.root;
+                        for (let aLetter of aPartialWord) {
+                            // aLetter[0] is the actual alphabet letter, [1] is the row number, [2] is the column number
+                            oCurrentNode = oCurrentNode.children[aLetter[0]];
                         }
 
-                        this.generate_suffix(partial_word, rack, tile, "A", node);
+                        // Generate "suffix" to complete the found letters and create a new word
+                        this.generateSuffix(aPartialWord, aRack, oTile, "A", oCurrentNode);
                     } else {
-                        let limit = 0;
-                        while (!curr_cell.isAnchor && columnNumber > 0 && limit < 11) {
-                            limit += 1;
+                        // There is no letter on the left of the tile
+                        let iLimit = 0;
+                        // We count how many "blank" tiles are available
+                        while (!oCurrentTile.isAnchor && columnNumber > 0 && iLimit < 11) {
+                            iLimit += 1;
                             columnNumber -= 1;
-                            curr_cell = board[rowNumber][columnNumber];
+                            oCurrentTile = aBoard[rowNumber][columnNumber];
                         }
 
-                        this.generate_prefix([], limit - 1, rack, tile, "A");
+                        // We try to generate a "prefix" to create a new word
+                        this.generatePrefix([], iLimit - 1, aRack, oTile, "A");
                     }
                 }
 
+                // If the current tile is not against the top border
+                if (oTile.rowNumber > 0) {
+                    let rowNumber = oTile.rowNumber - 1;
+                    let columnNumber = oTile.columnNumber;
+                    let oCurrentTile = aBoard[rowNumber][columnNumber];
+                    let aPartialWord = [];
 
-                if (tile.rowNumber > 0) {
-                    let rowNumber = tile.rowNumber - 1;
-                    let columnNumber = tile.columnNumber;
-                    let curr_cell = board[rowNumber][columnNumber];
-                    let partial_word = [];
-
-                    if (curr_cell.letter) {
-                        while (curr_cell.letter) {
-                            partial_word.push([curr_cell.letter, curr_cell.rowNumber, curr_cell.columnNumber]);
+                    // If there are letters on the top, we retrieve them and try to build a "suffix" to extend the word
+                    if (oCurrentTile.letter) {
+                        while (oCurrentTile.letter) {
+                            aPartialWord.push([oCurrentTile.letter, oCurrentTile.rowNumber, oCurrentTile.columnNumber]);
                             if (rowNumber === 0) {
                                 break;
                             }
                             rowNumber -= 1;
-                            curr_cell = board[rowNumber][columnNumber];
+                            oCurrentTile = aBoard[rowNumber][columnNumber];
                         }
 
-                        partial_word.reverse();
+                        aPartialWord.reverse();
 
-                        let node = trie.root;
-                        for (let item of partial_word) {
-                            node = node.children[item[0]];
+                        let oCurrentNode = oTrieTree.root;
+                        for (let aLetter of aPartialWord) {
+                            // aLetter[0] is the actual alphabet letter, [1] is the row number, [2] is the column number
+                            oCurrentNode = oCurrentNode.children[aLetter[0]];
                         }
 
-                        this.generate_suffix(partial_word, rack, tile, "D", node);
+                        // Generate "suffix" to complete the found letters and create a new word
+                        this.generateSuffix(aPartialWord, aRack, oTile, "D", oCurrentNode);
                     } else {
-                        let limit = 0;
-                        while (!curr_cell.isAnchor && rowNumber > 0 && limit < 11) {
-                            limit += 1;
+                        // There is no letter on the top of the tile
+                        let iLimit = 0;
+                        // We count how many "blank" tiles are available
+                        while (!oCurrentTile.isAnchor && rowNumber > 0 && iLimit < 11) {
+                            iLimit += 1;
                             rowNumber -= 1;
-                            curr_cell = board[rowNumber][columnNumber];
+                            oCurrentTile = aBoard[rowNumber][columnNumber];
                         }
 
-                        this.generate_prefix([], limit, rack, tile, "D");
+                        // We try to generate a "prefix" to create a new word
+                        this.generatePrefix([], iLimit, aRack, oTile, "D");
                     }
                 }
             }
         }
     }
 
-    generate_prefix(partial_word, limit, rack, anchor, orientation, node = null) {
+    generatePrefix(partial_word, limit, rack, anchor, orientation, node = null) {
         if (!node) {
             node = this.dictionary.root;
         }
-        this.generate_suffix(partial_word, rack, anchor, orientation, node);
+        this.generateSuffix(partial_word, rack, anchor, orientation, node);
 
         if (limit > 0) {
             for (let letter in node.children) {
@@ -327,7 +332,7 @@ export class Solver {
                         }
                     }
 
-                    this.generate_prefix(partial_word, limit - 1, rack, anchor, orientation, child);
+                    this.generatePrefix(partial_word, limit - 1, rack, anchor, orientation, child);
                     partial_word.pop();
                     rack.push(child.letter);
                 }
@@ -335,7 +340,7 @@ export class Solver {
         }
     }
 
-    generate_suffix(partial_word, rack, tile, orientation, node) {
+    generateSuffix(partial_word, rack, tile, orientation, node) {
         if (tile.rowNumber >= ScrabbleBoard.boardSize - 1 || tile.columnNumber >= ScrabbleBoard.boardSize - 1) {
             if (node.terminate) {
                 for (let letter of partial_word) {
@@ -398,7 +403,7 @@ export class Solver {
                     let col = tile.columnNumber;
                     let curr_cell = orientation === 'A' ? this.board[row][col + 1] : this.board[row + 1][col];
 
-                    this.generate_suffix(partial_word, rack, curr_cell, orientation, node.children[letter]);
+                    this.generateSuffix(partial_word, rack, curr_cell, orientation, node.children[letter]);
                     partial_word.pop();
                     rack.push(letter);
                 }
@@ -409,7 +414,7 @@ export class Solver {
                 let row = tile.rowNumber;
                 let col = tile.columnNumber;
                 let curr_cell = orientation === 'A' ? this.board[row][col + 1] : this.board[row + 1][col];
-                this.generate_suffix(partial_word, rack, curr_cell, orientation, node.children[tile.letter]);
+                this.generateSuffix(partial_word, rack, curr_cell, orientation, node.children[tile.letter]);
                 partial_word.pop()
             }
         }
@@ -506,13 +511,13 @@ export class Solver {
 
         let score = this.compute_score(move_cell);
 
-        if (score > this.best_score) {
+        if (score > this.bestScore) {
             if (!this.check_all_formed_words(move)) {
                 return;
             }
-            this.best_moves.push({'move': _.cloneDeep(this.best_move).slice(), 'score': score});
-            this.best_score = score
-            this.best_move = _.cloneDeep(move).slice();
+            this.bestMoves.push({'move': _.cloneDeep(this.bestMove).slice(), 'score': score});
+            this.bestScore = score
+            this.bestMove = _.cloneDeep(move).slice();
         }
     }
 
