@@ -11,6 +11,7 @@ export class ScrabbleRack {
         return 7;
     }
 
+    // Parse the html rack to build an exploitable array out of it
     static getRackAsArray() {
         let aRack = [];
         for (let oRackTileElement of document.querySelector('.scrabble-rack').children) {
@@ -20,15 +21,25 @@ export class ScrabbleRack {
         return aRack;
     }
 
-    static saveRackInLocalStorage(oEvent) {
+    // Save to rack in the local storage for actualisation or future visit
+    static saveRackInLocalStorage() {
         localStorage.setItem('rack', JSON.stringify(ScrabbleRack.getRackAsArray()));
     }
 
+    /**
+     * Identify used letter in the move and mark them with a color in the html rack
+     * @param {array} aBestMove An array of arrays each representing a tile, each array have at least [0] letter, [1] row number, [2] column number
+     */
     static drawRackBestMove(aBestMove) {
+        ScrabbleRack.resetRackBestMove();
         let aRackElements = document.querySelector('.scrabble-rack').children;
         for (let aMove of aBestMove) {
             for (let oRackElement of aRackElements) {
-                if (oRackElement.dataset.letter === aMove[0] && !oRackElement.classList.contains('best-move')) {
+                if (oRackElement.dataset.letter === ' ' && aMove.length === 4 && aMove[3]) {
+                    let oRackInput = oRackElement.querySelector('input');
+                    oRackInput.classList.add('best-move-joker');
+                    oRackElement.classList.add('best-move-joker');
+                } else if (oRackElement.dataset.letter === aMove[0] && !oRackElement.classList.contains('best-move')) {
                     let oRackInput = oRackElement.querySelector('input');
                     oRackInput.classList.add('best-move');
                     oRackElement.classList.add('best-move');
@@ -38,6 +49,19 @@ export class ScrabbleRack {
         }
     }
 
+    // Remove the best move tile identification
+    static resetRackBestMove() {
+        let aRackElements = document.querySelector('.scrabble-rack').children;
+        for (let oRackElement of aRackElements) {
+            let oRackInput = oRackElement.querySelector('input');
+            oRackInput.classList.remove('best-move');
+            oRackElement.classList.remove('best-move');
+            oRackInput.classList.remove('best-move-joker');
+            oRackElement.classList.remove('best-move-joker');
+        }
+    }
+
+    // Retrieve the local stored rack and draw it
     loadFromLocalStorage() {
         const aStoredRack = JSON.parse(localStorage.getItem('rack'));
         this.drawScrabbleRack(aStoredRack);
@@ -89,9 +113,9 @@ export class ScrabbleRack {
 
             // Alphabet or space or interrogation mark
             if ((iKeyCode >= 65 && iKeyCode <= 90) || iKeyCode === 32 || (oEvent.shiftKey && iKeyCode === 188)) {
-                oSelectedInput.setAttribute('value', sKeyLetter);
+                oSelectedInput.setAttribute('value', sKeyLetter.toUpperCase());
                 oSelectedInput.classList.add('scrabble-filled');
-                oSelectedInput.parentElement.dataset.letter = sKeyLetter;
+                oSelectedInput.parentElement.dataset.letter = sKeyLetter.toUpperCase();
                 if ((iKeyCode >= 65 && iKeyCode <= 90)) {
                     oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 }

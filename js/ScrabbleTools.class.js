@@ -2,10 +2,11 @@ import {ScrabbleRack} from "./ScrabbleRack.class.js";
 import {ScrabbleBoard} from "./ScrabbleBoard.class.js";
 
 export class ScrabbleTools {
+
     /**
      * Search the score value of the given letter
      * @param {string} sLetter
-     * @returns {number}
+     * @returns {number|string}
      */
     static getScoreByLetter(sLetter) {
         const aScores = {
@@ -18,7 +19,9 @@ export class ScrabbleTools {
             8: 'j,x',
             10: 'q,z'
         };
-
+        if (sLetter === ' ') {
+            return 0;
+        }
         if (sLetter.length !== 1) {
             return 0;
         }

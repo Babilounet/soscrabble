@@ -23,6 +23,7 @@ export class ScrabbleBoard {
         return 11;
     }
 
+    // Parse the html board to build an exploitable array out of it
     static getBoardAsArray() {
         let aBoard = [];
         for (let oRowElement of document.querySelector('.scrabble-board').children) {
@@ -40,25 +41,50 @@ export class ScrabbleBoard {
         return aBoard;
     }
 
-    static saveBoardInLocalStorage(oEvent) {
+    // Save to board in the local storage for actualisation or future visit
+    static saveBoardInLocalStorage() {
         localStorage.setItem('board', JSON.stringify(ScrabbleBoard.getBoardAsArray()));
         document.querySelector('.save-check').classList.remove('invisible');
     }
 
+    /**
+     * Draw the given move on the board
+     * @param {array} aBestMove An array of arrays each representing a tile, each array have at least [0] letter, [1] row number, [2] column number
+     */
     static drawBoardBestMove(aBestMove) {
+        ScrabbleBoard.resetBoardMoves();
         for (let aMove of aBestMove) {
             let oTileElement = document.querySelector('.scrabble-board').children[aMove[1]].children[aMove[2]];
             if (typeof oTileElement.dataset.letter === 'undefined') {
                 let oSelectedInput = oTileElement.querySelector('input');
                 oSelectedInput.setAttribute('value', aMove[0]);
                 oSelectedInput.classList.add('scrabble-filled');
-                oSelectedInput.classList.add('best-move');
+                (aMove.length === 4 && aMove[3]) ? oSelectedInput.classList.add('best-move-joker') : oSelectedInput.classList.add('best-move');
                 oTileElement.dataset.value = ScrabbleTools.getScoreByLetter(aMove[0]).toString();
                 oTileElement.dataset.letter = aMove[0];
             }
         }
     }
 
+    // Remove the best move tile identification
+    static resetBoardMoves() {
+        const aTiles = document.querySelectorAll('.scrabble-tile')
+        for (let oTileElement of aTiles) {
+            let oSelectedInput = oTileElement.querySelector('input');
+            oTileElement.classList.remove('best-move');
+            oTileElement.classList.remove('best-move-joker');
+            oTileElement.classList.remove('word-error');
+            oSelectedInput.classList.remove('best-move');
+            oSelectedInput.classList.remove('best-move-joker');
+            oSelectedInput.classList.remove('word-error');
+        }
+    }
+
+    /**
+     * Reset all the available letters and anchors for the given board
+     * @param {array} aBoard
+     * @returns {array}
+     */
     static resetAnchorsAndAvailableLetter(aBoard) {
         let aResetBoard = [];
         for (let aRow of aBoard) {
@@ -74,6 +100,51 @@ export class ScrabbleBoard {
         return aResetBoard;
     }
 
+    /**
+     * Search the word in board and set it as error
+     * @param {string} sWord
+     * @param {array} aBoard
+     */
+    static setWordAsError(sWord, aBoard) {
+        for (let iValidationRowNumber = 0; iValidationRowNumber < ScrabbleBoard.boardSize; iValidationRowNumber++) {
+            let sSearchWord = '';
+            for (let iValidationColumnNumber = 0; iValidationColumnNumber < ScrabbleBoard.boardSize; iValidationColumnNumber++) {
+                if (aBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                    sSearchWord += aBoard[iValidationRowNumber][iValidationColumnNumber].letter;
+                } else {
+                    sSearchWord = '';
+                }
+                if (sSearchWord === sWord) {
+                    while (iValidationColumnNumber >= 0 && aBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                        document.querySelector('.scrabble-board').children[iValidationRowNumber].children[iValidationColumnNumber].classList.add('word-error');
+                        document.querySelector('.scrabble-board').children[iValidationRowNumber].children[iValidationColumnNumber].querySelector('input').classList.add('word-error');
+                        iValidationColumnNumber--;
+                    }
+                    return;
+                }
+            }
+        }
+        for (let iValidationColumnNumber = 0; iValidationColumnNumber < ScrabbleBoard.boardSize; iValidationColumnNumber++) {
+            let sSearchWord = '';
+            for (let iValidationRowNumber = 0; iValidationRowNumber < ScrabbleBoard.boardSize; iValidationRowNumber++) {
+                if (aBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                    sSearchWord += aBoard[iValidationRowNumber][iValidationColumnNumber].letter;
+                } else {
+                    sSearchWord = '';
+                }
+                if (sSearchWord === sWord) {
+                    while (iValidationRowNumber >= 0 && aBoard[iValidationRowNumber][iValidationColumnNumber].letter !== '') {
+                        document.querySelector('.scrabble-board').children[iValidationRowNumber].children[iValidationColumnNumber].classList.add('word-error');
+                        document.querySelector('.scrabble-board').children[iValidationRowNumber].children[iValidationColumnNumber].querySelector('input').classList.add('word-error');
+                        iValidationRowNumber--;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    // Retrieve the local stored board and draw it
     loadFromLocalStorage() {
         const aStoredBoard = JSON.parse(localStorage.getItem('board'));
         this.drawScrabbleBoard(aStoredBoard);

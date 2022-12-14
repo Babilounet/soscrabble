@@ -30,6 +30,17 @@ $filled-color-gradiant-down: #f0b73b;
 $filled-best-move-color-gradiant-up: #a8f362;
 $filled-best-move-color-gradiant-down: #93ce34;
 
+// Tile autofilled with a best-move letter
+$filled-best-move-joker-color-box-shadow: #2f878f;
+$filled-best-move-joker-color-gradiant-up: #62e7f3;
+$filled-best-move-joker-color-gradiant-down: #42c8d5;
+
+// Tile autofilled with a best-move letter
+$filled-word-error-color-box-shadow: #a83c3c;
+$filled-word-error-color-gradiant-up: #f36262;
+$filled-word-error-color-gradiant-down: #e03e3e;
+
+
 // Default tile
 $tile-color-gradiant-up: #8fa0b3;
 $tile-color-gradiant-down: #e6ebef;
@@ -268,6 +279,16 @@ body {
                   box-shadow: inset 2px 2px 2px #688f22;
                   background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
                 }
+
+                &.best-move-joker {
+                  box-shadow: inset 2px 2px 2px $filled-best-move-joker-color-box-shadow;
+                  background: linear-gradient($filled-best-move-joker-color-gradiant-up, 20%, $filled-best-move-joker-color-gradiant-down);
+                }
+
+                &.word-error {
+                  box-shadow: inset 2px 2px 2px $filled-word-error-color-box-shadow;
+                  background: linear-gradient($filled-word-error-color-gradiant-up, 20%, $filled-word-error-color-gradiant-down);
+                }
               }
             }
           }
@@ -347,6 +368,11 @@ body {
             &.best-move {
               box-shadow: inset 2px 2px 2px #688f22;
               background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
+            }
+
+            &.best-move-joker {
+              box-shadow: inset 2px 2px 2px $filled-best-move-joker-color-box-shadow;
+              background: linear-gradient($filled-best-move-joker-color-gradiant-up, 20%, $filled-best-move-joker-color-gradiant-down);
             }
           }
         }

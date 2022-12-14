@@ -13,5 +13,7 @@ export class Tile {
         this.verticalSum = 0;
         this.wordMuliplier = iWordMultiplier;
         this.letterMultiplier = iLetterMultiplier;
+        this.alreadyOnBoard = false;
+        this.isJoker = false;
     }
 }

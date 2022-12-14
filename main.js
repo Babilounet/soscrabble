@@ -5,23 +5,20 @@ import {ScrabbleTools} from "./js/ScrabbleTools.class.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     let oScrabbleBoard = new ScrabbleBoard('scrabble-board');
-    if (localStorage.getItem('board')) {
-        oScrabbleBoard.loadFromLocalStorage();
-    } else {
-        oScrabbleBoard.drawScrabbleBoard();
-    }
+    localStorage.getItem('board') ? oScrabbleBoard.loadFromLocalStorage() : oScrabbleBoard.drawScrabbleBoard();
 
     let oScrabbleRack = new ScrabbleRack('scrabble-rack');
-    if (localStorage.getItem('rack')) {
-        oScrabbleRack.loadFromLocalStorage();
-    } else {
-        oScrabbleRack.drawScrabbleRack();
-    }
+    localStorage.getItem('rack') ? oScrabbleRack.loadFromLocalStorage() : oScrabbleRack.drawScrabbleRack();
 
     let oSolver = new Solver('dictionaries/dictionary-fr.txt');
 
     document.querySelector('#save-board').addEventListener('click', ScrabbleTools.saveDataInLocalStorage);
     document.querySelector('#find-best-move').addEventListener('click', function () {
-        oSolver.findBestMove();
+        document.querySelector('.find-spinner').classList.remove('invisible');
+        setTimeout(function () {
+            oSolver.findBestMove();
+            document.querySelector('.find-spinner').classList.add('invisible');
+        }, 100);
+
     });
 });
