@@ -56,4 +56,12 @@ export class ScrabbleTools {
         ScrabbleRack.saveRackInLocalStorage();
     }
 
+    static getStringWordFromMove(aMove){
+        let sWord = '';
+        for(let aLetter of aMove){
+            sWord += aLetter[0];
+        }
+        return sWord;
+    }
+
 }

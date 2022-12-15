@@ -259,6 +259,8 @@ export class Solver {
                     continue;
                 }
 
+                (oTile.rowNumber === 4 && oTile.columnNumber === 8) ? this.log = true : this.log = false;
+
                 // If the current tile is not against the left border
                 if (oTile.columnNumber > 0) {
                     let iRowNumber = oTile.rowNumber;
@@ -364,7 +366,7 @@ export class Solver {
         this.generateSuffix(aPartialWord, aRack, oTile, sOrientation, oNode);
 
         // If we have any free tile to fill
-        if (iLimit > 0) {
+        if (iLimit >= 0) {
             // For every possible "next-letter" in our word
             for (let sLetter in oNode.children) {
                 // Check if we have this "next-letter" in our rack
@@ -699,6 +701,9 @@ export class Solver {
      */
     evaluateMove(aMove) {
         let aMoveTiles = [];
+
+        (ScrabbleTools.getStringWordFromMove(aMove) === 'POUFFA') ? this.loglog = true : this.loglog = false;
+        if(this.loglog) console.log(aMove);
         // Retrieve tiles corresponding to the move and create a deep copy for testing without altering the board
         for (let aLetter of aMove) {
             if (this.board[aLetter[1]][aLetter[2]].letter === aLetter[0]) {
@@ -712,13 +717,16 @@ export class Solver {
             }
             aMoveTiles.push(oCopiedTile);
         }
+        if(this.loglog) console.log(aMove);
 
         if (!this.isMoveValid(aMoveTiles)) {
             return;
         }
+        if(this.loglog) console.log('aaaa');
 
         // Retrieve score
         let iScore = this.calculateScoreForMove(aMoveTiles);
+        if(this.loglog) console.log(iScore);
 
         // Ignore the move if we already tested a better solution
         if (iScore >= this.bestScore) {
