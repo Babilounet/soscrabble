@@ -503,6 +503,11 @@ export class Solver {
                         if (oNode.children[sLetter].terminate) {
                             for (let aLetter of aPartialWord) {
                                 if (this.board[aLetter[1]][aLetter[2]].isAnchor) {
+                                    for (let aMoveLetter in aPartialWord) {
+                                        if (aMoveLetter[0] === aLetter && aMoveLetter.length < 4) {
+                                            
+                                        }
+                                    }
                                     this.evaluateMove(aPartialWord);
                                     break;
                                 }
@@ -703,7 +708,6 @@ export class Solver {
         let aMoveTiles = [];
 
         (ScrabbleTools.getStringWordFromMove(aMove) === 'POUFFA') ? this.loglog = true : this.loglog = false;
-        if(this.loglog) console.log(aMove);
         // Retrieve tiles corresponding to the move and create a deep copy for testing without altering the board
         for (let aLetter of aMove) {
             if (this.board[aLetter[1]][aLetter[2]].letter === aLetter[0]) {
@@ -717,16 +721,16 @@ export class Solver {
             }
             aMoveTiles.push(oCopiedTile);
         }
-        if(this.loglog) console.log(aMove);
+        if (this.loglog) console.log(_.cloneDeep(aMove));
 
         if (!this.isMoveValid(aMoveTiles)) {
             return;
         }
-        if(this.loglog) console.log('aaaa');
+        if (this.loglog) console.log('aaaa');
 
         // Retrieve score
         let iScore = this.calculateScoreForMove(aMoveTiles);
-        if(this.loglog) console.log(iScore);
+        if (this.loglog) console.log(iScore);
 
         // Ignore the move if we already tested a better solution
         if (iScore >= this.bestScore) {
