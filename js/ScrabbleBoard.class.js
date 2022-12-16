@@ -194,6 +194,7 @@ export class ScrabbleBoard {
         oInputElement.readonly = 'readonly';
 
         oInputElement.addEventListener('input', function (oEvent) {
+            console.log('input event');
             const oSelectedInput = this;
             const sKeyLetter = oEvent.data;
 
@@ -206,6 +207,7 @@ export class ScrabbleBoard {
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (sKeyLetter === '') {
+                oEvent.preventDefault();
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
                 oSelectedInput.classList.remove('scrabble-filled');
@@ -216,6 +218,7 @@ export class ScrabbleBoard {
             return true;
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
+            console.log('keydown event');
             const oSelectedInput = this;
 
             if (event.key === 'Backspace' || event.key === 'Delete') {

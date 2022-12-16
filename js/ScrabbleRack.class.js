@@ -122,6 +122,7 @@ export class ScrabbleRack {
                 }
                 // Delete & Back
             } else if (sKeyLetter === '' && oSelectedInput.value) {
+                oEvent.preventDefault();
                 const isFilled = oSelectedInput.classList.contains('scrabble-filled');
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
