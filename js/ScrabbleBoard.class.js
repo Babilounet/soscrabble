@@ -196,7 +196,7 @@ export class ScrabbleBoard {
         oInputElement.addEventListener('input', function (oEvent) {
             console.log('input event');
             const oSelectedInput = this;
-            const sKeyLetter = oEvent.data;
+            const sKeyLetter = oEvent.data ?? '';
 
             console.log('oEvent.data');
             console.log(oEvent.data);
@@ -209,7 +209,7 @@ export class ScrabbleBoard {
                 oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
-            } else if (sKeyLetter === '') {
+            } else if (sKeyLetter === '' && oSelectedInput.value) {
                 console.log('Empty');
                 oEvent.preventDefault();
                 console.log('Empty removeAttribute');
@@ -222,24 +222,6 @@ export class ScrabbleBoard {
             }
 
             return true;
-        });
-        oInputElement.addEventListener('keydown', function (oEvent) {
-            console.log('keydown event');
-            const oSelectedInput = this;
-
-            console.log('event.key');
-            console.log(event.key);
-            if (event.key === 'Backspace' || event.key === 'Delete') {
-                console.log('Backspace Delete');
-                oEvent.preventDefault();
-                console.log('Backspace removeAttribute');
-                oSelectedInput.removeAttribute('value');
-                oSelectedInput.value = '';
-                console.log('Backspace classList.remove');
-                oSelectedInput.classList.remove('scrabble-filled');
-                delete oSelectedInput.parentElement.dataset.value;
-                delete oSelectedInput.parentElement.dataset.letter;
-            }
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
             console.log('keydown event');
