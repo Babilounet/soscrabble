@@ -199,6 +199,7 @@ export class ScrabbleBoard {
 
             // Alphabet
             if (sKeyLetter.match(/^[a-z]$/i) !== null) {
+                oEvent.preventDefault();
                 oSelectedInput.setAttribute('value', sKeyLetter);
                 oSelectedInput.value = sKeyLetter;
                 oSelectedInput.classList.add('scrabble-filled');

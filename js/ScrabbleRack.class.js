@@ -110,6 +110,7 @@ export class ScrabbleRack {
 
             // Alphabet or space or interrogation mark
             if (sKeyLetter.match(/^[a-z ?]$/i) !== null) {
+                oEvent.preventDefault();
                 oSelectedInput.setAttribute('value', sKeyLetter.toUpperCase());
                 oSelectedInput.value = sKeyLetter.toUpperCase();
                 oSelectedInput.classList.add('scrabble-filled');
