@@ -49,8 +49,6 @@ export class Solver {
             // Draw the best move on the board & the rack
             ScrabbleBoard.drawBoardBestMove(this.bestMove);
             ScrabbleRack.drawRackBestMove(this.bestMove);
-
-            console.log(this);
         }
     }
 
@@ -258,8 +256,6 @@ export class Solver {
                 if (!oTile.isAnchor) {
                     continue;
                 }
-
-                (oTile.rowNumber === 4 && oTile.columnNumber === 8) ? this.log = true : this.log = false;
 
                 // If the current tile is not against the left border
                 if (oTile.columnNumber > 0) {
@@ -503,11 +499,6 @@ export class Solver {
                         if (oNode.children[sLetter].terminate) {
                             for (let aLetter of aPartialWord) {
                                 if (this.board[aLetter[1]][aLetter[2]].isAnchor) {
-                                    for (let aMoveLetter in aPartialWord) {
-                                        if (aMoveLetter[0] === aLetter && aMoveLetter.length < 4) {
-                                            
-                                        }
-                                    }
                                     this.evaluateMove(aPartialWord);
                                     break;
                                 }
@@ -705,45 +696,67 @@ export class Solver {
      * @param {array} aMove An array of arrays each representing a tile, each array have at least [0] letter, [1] row number, [2] column number, [3] true : tile is joker, false tile is already placed on the board
      */
     evaluateMove(aMove) {
-        let aMoveTiles = [];
+        let aMoves = [];
+        aMoves.push(_.cloneDeep(aMove).slice());
 
-        (ScrabbleTools.getStringWordFromMove(aMove) === 'POUFFA') ? this.loglog = true : this.loglog = false;
-        // Retrieve tiles corresponding to the move and create a deep copy for testing without altering the board
-        for (let aLetter of aMove) {
-            if (this.board[aLetter[1]][aLetter[2]].letter === aLetter[0]) {
-                aLetter[3] = false;
+        // Joker is 0 point and can waste an LT or LD bonus
+        for(let iMoveLetterKey in aMove){
+            // For all jokers in our word
+            if(3 in aMove[iMoveLetterKey] && aMove[iMoveLetterKey][3]){
+                // Get the joker letter
+                let sSearchLetter = aMove[iMoveLetterKey][0];
+                // Parse the word
+                for(let iSearchKey in aMove){
+                    // If there is another tile with the same lettre, try to switch place to see if this agencement got more score
+                    if(aMove[iSearchKey][0] === sSearchLetter && !(3 in aMove[iSearchKey])){
+                        aMove[iSearchKey][3] = true;
+                        aMove[iMoveLetterKey].splice(3, 1);
+                        // Add the new move to the list
+                        aMoves.push(_.cloneDeep(aMove).slice());
+                        // Restore the initial word
+                        aMove[iSearchKey].splice(3, 1);
+                        aMove[iMoveLetterKey][3] = true;
+                    }
+                }
             }
-            let oCopiedTile = _.cloneDeep(this.board[aLetter[1]][aLetter[2]]);
-            oCopiedTile.letter = aLetter[0];
-            // Third param of move give information on if the tile is a joker or an already set tile on the board
-            if (aLetter.length === 4) {
-                aLetter[3] ? oCopiedTile.isJoker = true : oCopiedTile.alreadyOnBoard = true;
+        }
+
+        for(let aMove of aMoves){
+            let aMoveTiles = [];
+            // Retrieve tiles corresponding to the move and create a deep copy for testing without altering the board
+            for (let aLetter of aMove) {
+                if (this.board[aLetter[1]][aLetter[2]].letter === aLetter[0]) {
+                    aLetter[3] = false;
+                }
+                let oCopiedTile = _.cloneDeep(this.board[aLetter[1]][aLetter[2]]);
+                oCopiedTile.letter = aLetter[0];
+                // Third param of move give information on if the tile is a joker or an already set tile on the board
+                if (aLetter.length === 4) {
+                    aLetter[3] ? oCopiedTile.isJoker = true : oCopiedTile.alreadyOnBoard = true;
+                }
+                aMoveTiles.push(oCopiedTile);
             }
-            aMoveTiles.push(oCopiedTile);
-        }
-        if (this.loglog) console.log(_.cloneDeep(aMove));
 
-        if (!this.isMoveValid(aMoveTiles)) {
-            return;
-        }
-        if (this.loglog) console.log('aaaa');
-
-        // Retrieve score
-        let iScore = this.calculateScoreForMove(aMoveTiles);
-        if (this.loglog) console.log(iScore);
-
-        // Ignore the move if we already tested a better solution
-        if (iScore >= this.bestScore) {
-            // Check the all word formed by this move are valid words
-            if (!this.allFormedWordsAllowed(aMove)) {
+            if (!this.isMoveValid(aMoveTiles)) {
                 return;
             }
 
-            // List progress of the scores
-            this.bestMoves.push({'move': _.cloneDeep(this.bestMove).slice(), 'score': iScore});
-            // Change the current best move
-            this.bestScore = iScore
-            this.bestMove = _.cloneDeep(aMove).slice();
+            // Retrieve score
+            let iScore = this.calculateScoreForMove(aMoveTiles);
+
+            // Ignore the move if we already tested a better solution
+            if (iScore >= this.bestScore) {
+                // Check the all word formed by this move are valid words
+                if (!this.allFormedWordsAllowed(aMove)) {
+                    return;
+                }
+
+                // List progress of the scores
+                this.bestMoves.push({'move': _.cloneDeep(this.bestMove).slice(), 'score': iScore});
+                // Change the current best move
+                this.bestScore = iScore
+                this.bestMove = _.cloneDeep(aMove).slice();
+            }
         }
     }
 
