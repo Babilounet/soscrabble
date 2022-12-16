@@ -198,8 +198,11 @@ export class ScrabbleBoard {
             const oSelectedInput = this;
             const sKeyLetter = oEvent.data;
 
+            console.log('oEvent.data');
+            console.log(oEvent.data);
             // Alphabet
             if (sKeyLetter.match(/^[a-z]$/i) !== null) {
+                console.log('Match');
                 oSelectedInput.setAttribute('value', sKeyLetter);
                 oSelectedInput.value = sKeyLetter;
                 oSelectedInput.classList.add('scrabble-filled');
@@ -224,6 +227,8 @@ export class ScrabbleBoard {
             console.log('keydown event');
             const oSelectedInput = this;
 
+            console.log('event.key');
+            console.log(event.key);
             if (event.key === 'Backspace' || event.key === 'Delete') {
                 console.log('Backspace Delete');
                 oEvent.preventDefault();
