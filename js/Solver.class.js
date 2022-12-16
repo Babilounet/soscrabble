@@ -54,7 +54,7 @@ export class Solver {
 
     /**
      * Calculate a simple sum of the score of all given tiles
-     * @param aTiles
+     * @param {array} aTiles
      * @returns {int}
      */
     calculateScoreForGivenTiles(aTiles) {
