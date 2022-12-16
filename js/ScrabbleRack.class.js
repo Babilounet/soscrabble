@@ -102,7 +102,7 @@ export class ScrabbleRack {
         oRackInputElement.id = 'rack-input' + iRackId.toString();
         oRackInputElement.readonly = 'readonly';
 
-        oRackInputElement.addEventListener('input', function (oEvent) {
+        oRackInputElement.addEventListener('beforeinput', function (oEvent) {
             const oSelectedInput = this;
             const iPreviousRackTileId = parseInt(oSelectedInput.parentElement.dataset.id) - 1;
             const iNextRackTileId = parseInt(oSelectedInput.parentElement.dataset.id) + 1;
