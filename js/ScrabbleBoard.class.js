@@ -207,9 +207,12 @@ export class ScrabbleBoard {
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (sKeyLetter === '') {
+                console.log('Empty');
                 oEvent.preventDefault();
+                console.log('Empty removeAttribute');
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
+                console.log('Empty classList.remove');
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;
@@ -222,9 +225,12 @@ export class ScrabbleBoard {
             const oSelectedInput = this;
 
             if (event.key === 'Backspace' || event.key === 'Delete') {
+                console.log('Backspace Delete');
                 oEvent.preventDefault();
+                console.log('Backspace removeAttribute');
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
+                console.log('Backspace classList.remove');
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;
