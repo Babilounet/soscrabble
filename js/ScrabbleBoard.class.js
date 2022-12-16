@@ -260,6 +260,8 @@ export class ScrabbleBoard {
             }
         });
         oInputElement.addEventListener('beforeinput', function (oEvent) {
+            console.log('deleteContentBackward');
+            console.log(oEvent);
             const oSelectedInput = this;
             if (oEvent.inputType === 'deleteContentBackward') {
                 console.log('deleteContentBackward');
