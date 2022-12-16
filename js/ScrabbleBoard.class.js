@@ -193,7 +193,7 @@ export class ScrabbleBoard {
         let oInputElement = document.createElement('input');
         oInputElement.readonly = 'readonly';
 
-        oInputElement.addEventListener('input', function (oEvent) {
+        oInputElement.addEventListener('beforeinput', function (oEvent) {
             console.log('input event');
             const oSelectedInput = this;
             const sKeyLetter = oEvent.data ?? '';
@@ -236,20 +236,6 @@ export class ScrabbleBoard {
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
                 console.log('Backspace classList.remove');
-                oSelectedInput.classList.remove('scrabble-filled');
-                delete oSelectedInput.parentElement.dataset.value;
-                delete oSelectedInput.parentElement.dataset.letter;
-            }
-        });
-        oInputElement.addEventListener('beforeinput', function (oEvent) {
-            console.log('deleteContentBackward');
-            console.log(oEvent);
-            const oSelectedInput = this;
-            if (oEvent.inputType === 'deleteContentBackward') {
-                console.log('deleteContentBackward');
-                oEvent.preventDefault();
-                oSelectedInput.removeAttribute('value');
-                oSelectedInput.value = '';
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;
