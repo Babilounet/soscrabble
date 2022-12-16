@@ -241,7 +241,36 @@ export class ScrabbleBoard {
                 delete oSelectedInput.parentElement.dataset.letter;
             }
         });
+        oInputElement.addEventListener('keydown', function (oEvent) {
+            console.log('keydown event');
+            const oSelectedInput = this;
 
+            console.log('event.key');
+            console.log(event.key);
+            if (event.key === 'Backspace' || event.key === 'Delete') {
+                console.log('Backspace Delete');
+                oEvent.preventDefault();
+                console.log('Backspace removeAttribute');
+                oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
+                console.log('Backspace classList.remove');
+                oSelectedInput.classList.remove('scrabble-filled');
+                delete oSelectedInput.parentElement.dataset.value;
+                delete oSelectedInput.parentElement.dataset.letter;
+            }
+        });
+        oInputElement.addEventListener('beforeinput', function (oEvent) {
+            const oSelectedInput = this;
+            if (oEvent.inputType === 'deleteContentBackward') {
+                console.log('deleteContentBackward');
+                oEvent.preventDefault();
+                oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
+                oSelectedInput.classList.remove('scrabble-filled');
+                delete oSelectedInput.parentElement.dataset.value;
+                delete oSelectedInput.parentElement.dataset.letter;
+            }
+        });
 
         const iBoardIndex = iHorizontalId * ScrabbleBoard.boardSize + iVerticalId;
         for (let sSpecialTileType in ScrabbleBoard.specialTilePositionIndex) {
