@@ -100,32 +100,31 @@ export class ScrabbleRack {
 
         let oRackInputElement = document.createElement('input');
         oRackInputElement.id = 'rack-input' + iRackId.toString();
-        oRackInputElement.maxLength = 1;
         oRackInputElement.readonly = 'readonly';
 
-        oRackInputElement.addEventListener('keydown', function (oEvent) {
-            oEvent.preventDefault();
+        oRackInputElement.addEventListener('input', function (oEvent) {
             const oSelectedInput = this;
             const iPreviousRackTileId = parseInt(oSelectedInput.parentElement.dataset.id) - 1;
             const iNextRackTileId = parseInt(oSelectedInput.parentElement.dataset.id) + 1;
-            const iKeyCode = oEvent.keyCode;
-            const sKeyLetter = (iKeyCode === 32 || (oEvent.shiftKey && iKeyCode === 188)) ? ' ' : oEvent.key;
+            const sKeyLetter = oEvent.data ?? '';
 
             // Alphabet or space or interrogation mark
-            if ((iKeyCode >= 65 && iKeyCode <= 90) || iKeyCode === 32 || (oEvent.shiftKey && iKeyCode === 188)) {
+            if (sKeyLetter.match(/^[a-z ?]$/i) !== null) {
                 oSelectedInput.setAttribute('value', sKeyLetter.toUpperCase());
+                oSelectedInput.value = sKeyLetter.toUpperCase();
                 oSelectedInput.classList.add('scrabble-filled');
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter.toUpperCase();
-                if ((iKeyCode >= 65 && iKeyCode <= 90)) {
+                if (sKeyLetter.match(/^[a-z]$/i) !== null) {
                     oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 }
                 if (iNextRackTileId < ScrabbleRack.rackSize) {
                     document.getElementById('rack-input' + iNextRackTileId.toString()).focus();
                 }
                 // Delete & Back
-            } else if (iKeyCode === 8 || iKeyCode === 46) {
-                const isFilled = !!oSelectedInput.value.length;
+            } else if (sKeyLetter === '' && oSelectedInput.value) {
+                const isFilled = oSelectedInput.classList.contains('scrabble-filled');
                 oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;
@@ -133,6 +132,32 @@ export class ScrabbleRack {
                     const oPreviousInputElement = document.getElementById('rack-input' + iPreviousRackTileId.toString());
                     if (!isFilled) {
                         oPreviousInputElement.removeAttribute('value');
+                        oPreviousInputElement.value = '';
+                        oPreviousInputElement.classList.remove('scrabble-filled');
+                        delete oPreviousInputElement.parentElement.dataset.value;
+                    }
+                    oPreviousInputElement.focus();
+                }
+            }
+        });
+
+        oRackInputElement.addEventListener('keydown', function (oEvent) {
+            const oSelectedInput = this;
+            const iPreviousRackTileId = parseInt(oSelectedInput.parentElement.dataset.id) - 1;
+
+            if (event.key === 'Backspace' || event.key === 'Delete') {
+                oEvent.preventDefault();
+                const isFilled = oSelectedInput.classList.contains('scrabble-filled');
+                oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
+                oSelectedInput.classList.remove('scrabble-filled');
+                delete oSelectedInput.parentElement.dataset.value;
+                delete oSelectedInput.parentElement.dataset.letter;
+                if (iPreviousRackTileId >= 0) {
+                    const oPreviousInputElement = document.getElementById('rack-input' + iPreviousRackTileId.toString());
+                    if (!isFilled) {
+                        oPreviousInputElement.removeAttribute('value');
+                        oPreviousInputElement.value = '';
                         oPreviousInputElement.classList.remove('scrabble-filled');
                         delete oPreviousInputElement.parentElement.dataset.value;
                     }

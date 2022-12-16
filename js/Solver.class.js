@@ -50,6 +50,7 @@ export class Solver {
             ScrabbleBoard.drawBoardBestMove(this.bestMove);
             ScrabbleRack.drawRackBestMove(this.bestMove);
         }
+        console.log(this);
     }
 
     /**
@@ -700,15 +701,15 @@ export class Solver {
         aMoves.push(_.cloneDeep(aMove).slice());
 
         // Joker is 0 point and can waste an LT or LD bonus
-        for(let iMoveLetterKey in aMove){
+        for (let iMoveLetterKey in aMove) {
             // For all jokers in our word
-            if(3 in aMove[iMoveLetterKey] && aMove[iMoveLetterKey][3]){
+            if (3 in aMove[iMoveLetterKey] && aMove[iMoveLetterKey][3]) {
                 // Get the joker letter
                 let sSearchLetter = aMove[iMoveLetterKey][0];
                 // Parse the word
-                for(let iSearchKey in aMove){
+                for (let iSearchKey in aMove) {
                     // If there is another tile with the same lettre, try to switch place to see if this agencement got more score
-                    if(aMove[iSearchKey][0] === sSearchLetter && !(3 in aMove[iSearchKey])){
+                    if (aMove[iSearchKey][0] === sSearchLetter && !(3 in aMove[iSearchKey])) {
                         aMove[iSearchKey][3] = true;
                         aMove[iMoveLetterKey].splice(3, 1);
                         // Add the new move to the list
@@ -721,7 +722,7 @@ export class Solver {
             }
         }
 
-        for(let aMove of aMoves){
+        for (let aMove of aMoves) {
             let aMoveTiles = [];
             // Retrieve tiles corresponding to the move and create a deep copy for testing without altering the board
             for (let aLetter of aMove) {

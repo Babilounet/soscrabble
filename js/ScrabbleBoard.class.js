@@ -191,23 +191,23 @@ export class ScrabbleBoard {
         oDecalElement.classList.add('scrabble-decal');
 
         let oInputElement = document.createElement('input');
-        oInputElement.maxLength = 1;
         oInputElement.readonly = 'readonly';
 
-        oInputElement.addEventListener('keydown', function (oEvent) {
+        oInputElement.addEventListener('input', function (oEvent) {
             const oSelectedInput = this;
-            const sKeyLetter = oEvent.key;
-            const iKeyCode = oEvent.keyCode;
+            const sKeyLetter = oEvent.data;
 
             // Alphabet
-            if (iKeyCode >= 65 && iKeyCode <= 90) {
+            if (sKeyLetter.match(/^[a-z]$/i) !== null) {
                 oSelectedInput.setAttribute('value', sKeyLetter);
+                oSelectedInput.value = sKeyLetter;
                 oSelectedInput.classList.add('scrabble-filled');
                 oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
-            } else if (iKeyCode === 8 || iKeyCode === 46) {
+            } else if (sKeyLetter === '') {
                 oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
                 oSelectedInput.classList.remove('scrabble-filled');
                 delete oSelectedInput.parentElement.dataset.value;
                 delete oSelectedInput.parentElement.dataset.letter;
@@ -215,6 +215,19 @@ export class ScrabbleBoard {
 
             return true;
         });
+        oInputElement.addEventListener('keydown', function (oEvent) {
+            const oSelectedInput = this;
+
+            if (event.key === 'Backspace' || event.key === 'Delete') {
+                oEvent.preventDefault();
+                oSelectedInput.removeAttribute('value');
+                oSelectedInput.value = '';
+                oSelectedInput.classList.remove('scrabble-filled');
+                delete oSelectedInput.parentElement.dataset.value;
+                delete oSelectedInput.parentElement.dataset.letter;
+            }
+        });
+
 
         const iBoardIndex = iHorizontalId * ScrabbleBoard.boardSize + iVerticalId;
         for (let sSpecialTileType in ScrabbleBoard.specialTilePositionIndex) {
