@@ -207,14 +207,18 @@ export class ScrabbleBoard {
 
             // Alphabet
             if (sKeyLetter.match(/^[a-z]$/i) !== null) {
+                console.log('match');
                 oEvent.preventDefault();
+                console.log(oSelectedInput.value);
                 oSelectedInput.setAttribute('value', sKeyLetter);
                 oSelectedInput.value = sKeyLetter;
+                console.log(oSelectedInput.value);
                 oSelectedInput.classList.add('scrabble-filled');
                 oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (sKeyLetter === '' && oSelectedInput.value) {
+                console.log('else');
                 oEvent.preventDefault();
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
@@ -224,6 +228,9 @@ export class ScrabbleBoard {
             }
 
             return true;
+        });
+        oInputElement.addEventListener('input', function (oEvent) {
+            oEvent.preventDefault();
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
             console.log(oEvent);
