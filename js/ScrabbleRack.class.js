@@ -145,7 +145,7 @@ export class ScrabbleRack {
         oRackInputElement.addEventListener('input', function () {
             const oSelectedInput = this;
             if (oSelectedInput.value.length > 1) {
-                oSelectedInput.value = oSelectedInput.parent.dataset.letter;
+                oSelectedInput.value = oSelectedInput.parentElement.dataset.letter;
             }
         });
         oRackInputElement.addEventListener('keydown', function (oEvent) {

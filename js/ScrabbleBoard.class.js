@@ -232,7 +232,7 @@ export class ScrabbleBoard {
             if (oSelectedInput.value.length > 1) {
                 console.log('input');
                 console.log(oEvent);
-                oSelectedInput.value = oSelectedInput.parent.dataset.letter;
+                oSelectedInput.value = oSelectedInput.parentElement.dataset.letter;
             }
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
