@@ -50,7 +50,6 @@ export class Solver {
             ScrabbleBoard.drawBoardBestMove(this.bestMove);
             ScrabbleRack.drawRackBestMove(this.bestMove);
         }
-        console.log(this);
     }
 
     /**

@@ -38,9 +38,7 @@ export class ScrabbleBoard {
             }
             aBoard.push(aRow);
         }
-        console.log(_.cloneDeep(aBoard).slice());
         return aBoard;
-
     }
 
     // Save to board in the local storage for actualisation or future visit
@@ -201,24 +199,19 @@ export class ScrabbleBoard {
         let oInputElement = document.createElement('input');
 
         oInputElement.addEventListener('beforeinput', function (oEvent) {
-            console.log(oEvent);
             const oSelectedInput = this;
             const sKeyLetter = oEvent.data ?? '';
 
             // Alphabet
             if (sKeyLetter.match(/^[a-z]$/i) !== null) {
-                console.log('match');
                 oEvent.preventDefault();
-                console.log(oSelectedInput.value);
                 oSelectedInput.setAttribute('value', sKeyLetter);
                 oSelectedInput.value = sKeyLetter;
-                console.log(oSelectedInput.value);
                 oSelectedInput.classList.add('scrabble-filled');
                 oSelectedInput.parentElement.dataset.value = ScrabbleTools.getScoreByLetter(sKeyLetter).toString();
                 oSelectedInput.parentElement.dataset.letter = sKeyLetter;
                 // Delete & Back
             } else if (sKeyLetter === '' && oSelectedInput.value) {
-                console.log('else');
                 oEvent.preventDefault();
                 oSelectedInput.removeAttribute('value');
                 oSelectedInput.value = '';
@@ -229,15 +222,20 @@ export class ScrabbleBoard {
 
             return true;
         });
-        oInputElement.addEventListener('input', function (oEvent) {
-
+        oInputElement.addEventListener('textInput', function (oEvent) {
+            oEvent.preventDefault();
+            console.log('textInput');
             console.log(oEvent);
+        });
+        oInputElement.addEventListener('input', function (oEvent) {
             const oSelectedInput = this;
-            console.log('input');
-            console.log(oSelectedInput.value);
+            if (oSelectedInput.value.length > 1) {
+                console.log('input');
+                console.log(oEvent);
+                oSelectedInput.value = oSelectedInput.parent.dataset.letter;
+            }
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
-            console.log(oEvent);
             const oSelectedInput = this;
 
             if (event.key === 'Backspace' || event.key === 'Delete') {
