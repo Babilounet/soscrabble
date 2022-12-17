@@ -41,6 +41,10 @@ export class Solver {
             this.checkVerticalValuesByColumnNumber(iCpt);
         }
 
+        if (!this.board[5][5].letter) {
+            this.board[5][5].isAnchor = true;
+        }
+
         // Process the datas to find the best move
         this.generateBestMoves();
 
