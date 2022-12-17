@@ -230,7 +230,11 @@ export class ScrabbleBoard {
             return true;
         });
         oInputElement.addEventListener('input', function (oEvent) {
-            oEvent.preventDefault();
+
+            console.log(oEvent);
+            const oSelectedInput = this;
+            console.log('input');
+            console.log(oSelectedInput.value);
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
             console.log(oEvent);
