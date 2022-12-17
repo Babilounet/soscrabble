@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('#save-board').addEventListener('click', ScrabbleTools.saveDataInLocalStorage);
     document.querySelector('#find-best-move').addEventListener('click', function () {
-        document.querySelector('.find-spinner').classList.remove('invisible');
+        document.querySelector('.find-minifying-glass').classList.add('vjs-hidden');
+        document.querySelector('.find-spinner').classList.remove('vjs-hidden');
         setTimeout(function () {
             oSolver.findBestMove();
-            document.querySelector('.find-spinner').classList.add('invisible');
+            document.querySelector('.find-spinner').classList.add('vjs-hidden');
+            document.querySelector('.find-minifying-glass').classList.remove('vjs-hidden');
         }, 100);
 
     });

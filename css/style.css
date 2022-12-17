@@ -23,6 +23,13 @@ body .page-container .header {
   padding-bottom: 50px;
   margin-bottom: -30px;
 }
+@media screen and (max-width: 990px) {
+  body .page-container .header {
+    min-height: 10vw;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
 body .page-container .header .logo-right {
   position: absolute;
   left: 100%;
@@ -31,6 +38,11 @@ body .page-container .header .logo-right {
   transform: rotate(20deg);
   margin: 0 auto 0 -90%;
 }
+@media screen and (max-width: 990px) {
+  body .page-container .header .logo-right {
+    display: none;
+  }
+}
 body .page-container .header .logo-left {
   position: absolute;
   left: 0;
@@ -38,6 +50,11 @@ body .page-container .header .logo-left {
   width: 75%;
   transform: rotate(-10deg);
   margin: 0 auto 0 20%;
+}
+@media screen and (max-width: 990px) {
+  body .page-container .header .logo-left {
+    display: none;
+  }
 }
 body .page-container .header .scrabble-solver {
   text-align: center;
@@ -50,11 +67,23 @@ body .page-container .header .scrabble-solver h1 {
   color: #FFF;
   z-index: 1;
 }
+@media screen and (max-width: 990px) {
+  body .page-container .header .scrabble-solver h1 {
+    font-size: calc(30px + 6vw);
+    padding-top: 2vw;
+  }
+}
 body .page-container .header .scrabble-solver small {
   font-weight: 700;
   font-size: 22px;
   line-height: 45px;
   color: #c5cbd1;
+}
+@media screen and (max-width: 990px) {
+  body .page-container .header .scrabble-solver small {
+    font-size: calc(12px + 1.2vw);
+    line-height: 4.5vw;
+  }
 }
 body .page-container .footer {
   height: 50px;
@@ -63,15 +92,50 @@ body .page-container .footer {
   width: 100%;
   padding-top: 10px;
 }
-body .page-container .container {
+body .page-container .container-fluid {
   background-color: #fff;
   height: 100%;
-  padding-bottom: 50px;
+  padding-bottom: 150px;
 }
-body .page-container .container h3 {
+@media screen and (min-width: 1200px) {
+  body .page-container .container-fluid {
+    max-width: 1200px;
+  }
+}
+body .page-container .container-fluid h3 {
   margin-bottom: 30px;
 }
-body .page-container .container #scrabble-board:before {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid h3 {
+    margin-bottom: 3vw;
+  }
+}
+body .page-container .container-fluid .arrow {
+  position: absolute;
+  width: 50%;
+  top: 50px;
+  left: 0;
+}
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid .arrow {
+    display: none;
+  }
+}
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid .col {
+    margin: 0;
+    padding: 0;
+  }
+}
+body .page-container .container-fluid #scrabble-board {
+  width: 594px;
+  height: 594px;
+  background-color: #d5dfea;
+  width: 594px;
+  height: 594px;
+  margin: auto;
+}
+body .page-container .container-fluid #scrabble-board::before {
   content: "";
   position: absolute;
   top: -20px;
@@ -81,21 +145,35 @@ body .page-container .container #scrabble-board:before {
   z-index: 0;
   background: repeating-linear-gradient(45deg, #0676c2 0px, #0676c2 20px, #2666ae 20px, #2666ae 40px);
 }
-body .page-container .container #scrabble-board {
-  width: 594px;
-  height: 594px;
-  background-color: #d5dfea;
-  width: 594px;
-  height: 594px;
-  margin: auto;
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board::before {
+    top: -1.05vw;
+    bottom: -2.1vw;
+    left: -1.05vw;
+    right: -1.05vw;
+  }
 }
-body .page-container .container #scrabble-board .scrabble-board {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board {
+    width: 97.9vw;
+    height: 97.9vw;
+    background-color: #d5dfea;
+    width: 97.9vw;
+    height: 97.9vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board {
   background-color: #d5dfea;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row {
   height: 54px;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row {
+    height: 9vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile {
   width: 54px;
   height: 54px;
   background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
@@ -106,7 +184,17 @@ body .page-container .container #scrabble-board .scrabble-board .scrabble-row .s
   color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile::after {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile {
+    width: 8.9vw;
+    height: 8.9vw;
+    background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
+    border: solid #d5dfea 2px;
+    border-radius: 1.4vw;
+    font-size: 1.8vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile::after {
   width: 33%;
   height: 33%;
   background-color: transparent;
@@ -119,41 +207,44 @@ body .page-container .container #scrabble-board .scrabble-board .scrabble-row .s
   text-align: right;
   z-index: 999;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile::after {
+    bottom: 2%;
+    right: 10%;
+    font-size: 2vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct {
   background: linear-gradient(#392b44, 15%, #745b88, 95%, #392b44);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct .scrabble-decal::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct input::before {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct .scrabble-decal::before, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct input::before {
   content: "★";
   font-size: 150%;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::before, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::after {
-  content: "";
-  position: absolute;
-  top: -4px;
-  height: calc(100% + 2px * 4);
-  z-index: 999;
-  transform: scaleX(0.7);
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct .scrabble-decal::before, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ct input::before {
+    font-size: 5vw;
+    top: 0.5vw;
+    position: relative;
+  }
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt input::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt .scrabble-decal::after, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt input::after {
-  transform: scaleY(0.7) rotate(90deg);
-}
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-ld {
   box-shadow: inset 2px 2px 2px #085b9d;
   background: linear-gradient(#085b9d, 15%, #138dd0, 95%, #085b9d);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-md {
   box-shadow: inset 2px 2px 2px #8d312b;
   background: linear-gradient(#8d312b, 15%, #c96057, 95%, #8d312b);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-mt {
   box-shadow: inset 2px 2px 2px #c97618;
   background: linear-gradient(#c97618, 15%, #e79f44, 95%, #c97618);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile.scrabble-tile-lt {
   box-shadow: inset 2px 2px 2px #42722f;
   background: linear-gradient(#42722f, 15%, #7bb460, 95%, #42722f);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile .scrabble-decal, body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile .scrabble-decal, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -167,7 +258,13 @@ body .page-container .container #scrabble-board .scrabble-board .scrabble-row .s
   font-size: 135%;
   font-weight: bold;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile .scrabble-decal, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
+    line-height: 7vw;
+    font-size: 2vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
   font-size: 190%;
   text-align: center;
   z-index: 999;
@@ -175,39 +272,53 @@ body .page-container .container #scrabble-board .scrabble-board .scrabble-row .s
   top: 0;
   left: 0;
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input:focus {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input {
+    font-size: 4.32vw;
+  }
+}
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input:focus {
   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled {
   box-shadow: inset 2px 2px 2px #ee972c;
   background: linear-gradient(#f3d262, 20%, #f0b73b);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled:focus {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled:focus {
   background-image: repeating-linear-gradient(45deg, #f0b73b, #f0b73b 10px, #f3d262 10px, #f3d262 20px);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move {
   box-shadow: inset 2px 2px 2px #688f22;
   background: linear-gradient(#a8f362, 20%, #93ce34);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move:focus {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move:focus {
   background-image: repeating-linear-gradient(45deg, #a8f362, #a8f362 10px, #93ce34 10px, #93ce34 20px);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move-joker {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move-joker {
   box-shadow: inset 2px 2px 2px #2f878f;
   background: linear-gradient(#62e7f3, 20%, #42c8d5);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move-joker:focus {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.best-move-joker:focus {
   background-image: repeating-linear-gradient(45deg, #62e7f3, #62e7f3 10px, #42c8d5 10px, #42c8d5 20px);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.word-error {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.word-error {
   box-shadow: inset 2px 2px 2px #a83c3c;
   background: linear-gradient(#f36262, 20%, #e03e3e);
 }
-body .page-container .container #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.word-error:focus {
+body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input.scrabble-filled.word-error:focus {
   background-image: repeating-linear-gradient(45deg, #f36262, #f36262 10px, #e03e3e 10px, #e03e3e 20px);
 }
-body .page-container .container #scrabble-rack:before {
+body .page-container .container-fluid #scrabble-rack {
+  width: 594px;
+  height: 594px;
+  background-color: #d5dfea;
+  width: 594px;
+  height: 82px;
+  margin: 31px auto 28px auto;
+  text-align: center;
+}
+body .page-container .container-fluid #scrabble-rack::before {
   content: "";
   position: absolute;
   top: -20px;
@@ -216,16 +327,32 @@ body .page-container .container #scrabble-rack:before {
   right: -20px;
   background: repeating-linear-gradient(45deg, #0676c2 0px, #0676c2 20px, #2666ae 20px, #2666ae 40px);
 }
-body .page-container .container #scrabble-rack {
-  width: 594px;
-  height: 594px;
-  background-color: #d5dfea;
-  width: 594px;
-  height: 82px;
-  margin: 31px auto 50px auto;
-  text-align: center;
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack::before {
+    top: -1.05vw;
+    bottom: -2.1vw;
+    left: -1.05vw;
+    right: -1.05vw;
+  }
 }
-body .page-container .container #scrabble-rack .scrabble-tile {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack {
+    width: 97.9vw;
+    height: 13.5vw;
+    margin: 2.1vw auto 1.05vw auto;
+    padding-bottom: 2.1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack .scrabble-rack {
+    margin-top: 5.1vw;
+  }
+}
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile {
   width: 82px;
   height: 82px;
   background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
@@ -237,7 +364,18 @@ body .page-container .container #scrabble-rack .scrabble-tile {
   margin-left: 1px;
   margin-right: 1px;
 }
-body .page-container .container #scrabble-rack .scrabble-tile::after {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile {
+    width: 13.5vw;
+    height: 13.5vw;
+    background: linear-gradient(#8fa0b3, 15%, #e6ebef, 95%, #8fa0b3);
+    border-radius: 2.6vw;
+    margin-left: 0.2vw;
+    margin-right: 0.2vw;
+    font-size: 3vw;
+  }
+}
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile::after {
   width: 33%;
   height: 33%;
   background-color: transparent;
@@ -249,7 +387,13 @@ body .page-container .container #scrabble-rack .scrabble-tile::after {
   text-align: right;
   z-index: 999;
 }
-body .page-container .container #scrabble-rack .scrabble-tile .scrabble-decal, body .page-container .container #scrabble-rack .scrabble-tile input, body .page-container .container #scrabble-rack #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input, body .page-container .container #scrabble-board .scrabble-board .scrabble-row #scrabble-rack .scrabble-tile input {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile::after {
+    right: 2vw;
+    line-height: 3.4vw;
+  }
+}
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile .scrabble-decal, body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input, body .page-container .container-fluid #scrabble-rack .scrabble-rack #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row #scrabble-rack .scrabble-rack .scrabble-tile input {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -263,7 +407,13 @@ body .page-container .container #scrabble-rack .scrabble-tile .scrabble-decal, b
   font-size: 135%;
   font-weight: bold;
 }
-body .page-container .container #scrabble-rack .scrabble-tile input {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile .scrabble-decal, body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input, body .page-container .container-fluid #scrabble-rack .scrabble-rack #scrabble-board .scrabble-board .scrabble-row .scrabble-tile input, body .page-container .container-fluid #scrabble-board .scrabble-board .scrabble-row #scrabble-rack .scrabble-rack .scrabble-tile input {
+    line-height: 13vw;
+    font-size: 2vw;
+  }
+}
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input {
   font-size: 250%;
   text-align: center;
   z-index: 999;
@@ -271,58 +421,109 @@ body .page-container .container #scrabble-rack .scrabble-tile input {
   top: 0;
   left: 0;
 }
-body .page-container .container #scrabble-rack .scrabble-tile input:focus {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input {
+    font-size: 6.5vw;
+  }
+}
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input:focus {
   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled {
   box-shadow: inset 2px 2px 2px #ee972c;
   background: linear-gradient(#f3d262, 20%, #f0b73b);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.6);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled:focus {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled:focus {
   background-image: repeating-linear-gradient(45deg, #f0b73b, #f0b73b 10px, #f3d262 10px, #f3d262 20px);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled.best-move {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled.best-move {
   box-shadow: inset 2px 2px 2px #688f22;
   background: linear-gradient(#a8f362, 20%, #93ce34);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled.best-move:focus {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled.best-move:focus {
   background-image: repeating-linear-gradient(45deg, #a8f362, #a8f362 10px, #93ce34 10px, #93ce34 20px);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled.best-move-joker {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled.best-move-joker {
   box-shadow: inset 2px 2px 2px #2f878f;
   background: linear-gradient(#62e7f3, 20%, #42c8d5);
 }
-body .page-container .container #scrabble-rack .scrabble-tile input.scrabble-filled.best-move-joker:focus {
+body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile input.scrabble-filled.best-move-joker:focus {
   background-image: repeating-linear-gradient(45deg, #62e7f3, #62e7f3 10px, #42c8d5 10px, #42c8d5 20px);
 }
-body .page-container .arrow {
+body .page-container .container-fluid #scrabble-buttons {
+  width: 594px;
+  margin: -16px auto auto;
+  display: flex;
+}
+body .page-container .container-fluid #scrabble-buttons::before {
+  content: "";
   position: absolute;
-  width: 50%;
-  top: 50px;
-  left: 0;
+  top: -20px;
+  bottom: -20px;
+  left: -20px;
+  right: -20px;
+  z-index: 0;
+  background: repeating-linear-gradient(45deg, #0676c2 0px, #0676c2 20px, #2666ae 20px, #2666ae 40px);
 }
 @media screen and (max-width: 990px) {
-  body .page-container .arrow {
-    display: none;
+  body .page-container .container-fluid #scrabble-buttons::before {
+    top: -2.1vw;
+    bottom: -2.1vw;
+    left: -1.05vw;
+    right: -1.05vw;
   }
 }
-body .page-container .button-row {
-  padding-bottom: 75px;
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-buttons {
+    width: 97.9vw;
+    margin: 2.75vw auto auto;
+  }
 }
-body .page-container .button-row .btn-warning {
+body .page-container .container-fluid #scrabble-buttons .scrabble-button {
+  width: 282px;
+  height: 100px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  font-size: 150%;
+}
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-buttons .scrabble-button {
+    width: 46.95vw;
+    height: 13.5vw;
+    font-size: 6vw;
+  }
+}
+body .page-container .container-fluid #scrabble-buttons .scrabble-button.btn-warning {
+  margin-right: 7.5px;
+  margin-left: 7.5px;
   color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
-  font-size: 22px;
   box-shadow: inset 2px 2px 2px #c97618;
   background: linear-gradient(#c97618, 15%, #e79f44, 95%, #c97618);
 }
-body .page-container .button-row .btn-primary {
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-buttons .scrabble-button.btn-warning {
+    margin-right: 1vw;
+    margin-left: 1vw;
+  }
+}
+body .page-container .container-fluid #scrabble-buttons .scrabble-button.btn-primary {
+  margin-right: 7.5px;
+  margin-left: 7.5px;
   color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
-  font-size: 22px;
   box-shadow: inset 2px 2px 2px #42722f;
   background: linear-gradient(#42722f, 15%, #7bb460, 95%, #42722f);
+}
+@media screen and (max-width: 990px) {
+  body .page-container .container-fluid #scrabble-buttons .scrabble-button.btn-primary {
+    margin-right: 1vw;
+    margin-left: 1vw;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

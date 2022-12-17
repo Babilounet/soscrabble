@@ -38,13 +38,20 @@ export class ScrabbleBoard {
             }
             aBoard.push(aRow);
         }
+        console.log(_.cloneDeep(aBoard).slice());
         return aBoard;
+
     }
 
     // Save to board in the local storage for actualisation or future visit
     static saveBoardInLocalStorage() {
         localStorage.setItem('board', JSON.stringify(ScrabbleBoard.getBoardAsArray()));
-        document.querySelector('.save-check').classList.remove('invisible');
+        document.querySelector('.save-floppy-disk').classList.add('vjs-hidden');
+        document.querySelector('.save-check').classList.remove('vjs-hidden');
+        setTimeout(function () {
+            document.querySelector('.save-check').classList.add('vjs-hidden');
+            document.querySelector('.save-floppy-disk').classList.remove('vjs-hidden');
+        }, 1000);
     }
 
     /**
@@ -58,6 +65,7 @@ export class ScrabbleBoard {
             if (typeof oTileElement.dataset.letter === 'undefined') {
                 let oSelectedInput = oTileElement.querySelector('input');
                 oSelectedInput.setAttribute('value', aMove[0]);
+                oSelectedInput.value = aMove[0];
                 oSelectedInput.classList.add('scrabble-filled');
                 (aMove.length === 4 && aMove[3]) ? oSelectedInput.classList.add('best-move-joker') : oSelectedInput.classList.add('best-move');
                 oTileElement.dataset.value = ScrabbleTools.getScoreByLetter(aMove[0]).toString();
@@ -191,9 +199,9 @@ export class ScrabbleBoard {
         oDecalElement.classList.add('scrabble-decal');
 
         let oInputElement = document.createElement('input');
-        oInputElement.readonly = 'readonly';
 
         oInputElement.addEventListener('beforeinput', function (oEvent) {
+            console.log(oEvent);
             const oSelectedInput = this;
             const sKeyLetter = oEvent.data ?? '';
 
@@ -218,6 +226,7 @@ export class ScrabbleBoard {
             return true;
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
+            console.log(oEvent);
             const oSelectedInput = this;
 
             if (event.key === 'Backspace' || event.key === 'Delete') {
@@ -257,6 +266,7 @@ export class ScrabbleBoard {
         const sStoredLetter = (aStoredTile && typeof aStoredTile['letter'] !== 'undefined') ? aStoredTile['letter'] : '';
         if (sStoredLetter) {
             oInputElement.setAttribute('value', sStoredLetter);
+            oInputElement.value = sStoredLetter;
             oInputElement.classList.add('scrabble-filled');
             oTileElement.dataset.value = ScrabbleTools.getScoreByLetter(sStoredLetter).toString();
             oTileElement.dataset.letter = sStoredLetter;

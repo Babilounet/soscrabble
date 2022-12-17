@@ -170,6 +170,7 @@ export class ScrabbleRack {
 
         if (sStoredRackLetter) {
             oRackInputElement.setAttribute('value', sStoredRackLetter);
+            oRackInputElement.value = sStoredRackLetter;
             oRackInputElement.classList.add('scrabble-filled');
             oRackTileElement.dataset.value = ScrabbleTools.getScoreByLetter(sStoredRackLetter).toString();
             oRackTileElement.dataset.letter = sStoredRackLetter;

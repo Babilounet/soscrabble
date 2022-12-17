@@ -17,7 +17,7 @@
             <div class="col-md-3">
                 <img alt="" class="logo-left" src="assets/logo-left.png"/>
             </div>
-            <div class="col-md-6 scrabble-solver ">
+            <div class="col-md-6 scrabble-solver">
                 <h1>SoScrabble</h1>
                 <small>Petite triche entre amis...</small>
             </div>
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content text-center">
             <div class="col-sm-2"></div>
             <div class="col">
@@ -43,23 +43,19 @@
             </div>
         </div>
         <div class="row justify-content-md-center button-row">
-            <div class="col-sm-2"></div>
-            <div class="col">
-                <button class="btn btn-block btn-lg btn-warning" id="save-board" type="button">
-                    <i aria-hidden="true" class="fa fa-floppy-o"></i> Sauvegarder
-                    <i aria-hidden="true" class="fa fa-check invisible save-check"></i>
+            <div id="scrabble-buttons">
+                <button class="btn btn-block btn-warning scrabble-button" id="save-board" type="button">
+                    <i aria-hidden="true" class="fa fa-floppy-o save-floppy-disk"></i>
+                    <i aria-hidden="true" class="fa fa-check vjs-hidden save-check"></i>
+                </button>
+                <button class="btn btn-block btn-primary scrabble-button" id="find-best-move" type="button">
+                    <i aria-hidden="true" class="fa fa-search find-minifying-glass"></i>
+                    <i aria-hidden="true" class="fa fa-spinner fa-spin vjs-hidden find-spinner"></i>
                 </button>
             </div>
-            <div class="col">
-                <button class="btn btn-block btn-lg btn-primary" id="find-best-move" type="button">
-                    <i aria-hidden="true" class="fa fa-search"></i> Trouver mot
-                    <i aria-hidden="true" class="fa fa-spinner fa-spin invisible find-spinner"></i>
-                </button>
-            </div>
-            <div class="col-sm-2"></div>
         </div>
     </div>
-    
+
     <footer class="bg-dark text-center text-lg-start footer">
         &copy; 2022 Copyright: <a class="text-white" href="https://github.com/Babilounet">Babilounet</a>
     </footer>

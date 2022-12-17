@@ -75,6 +75,25 @@ $rack-tile-size: 78px;
 $rack-tile-border-width: 2px;
 $final-rack-tile-size-with-border: $rack-tile-size + $rack-tile-border-width * 2;
 
+// Buttons
+$btn-space: 30px;
+$btn-width: $board-size / 2 - $btn-space / 2;
+$btn-height: 100px;
+
+// Responsive values
+$r-tile-size: 7vw;
+$r-tile-border-width: 0.5vw;
+$r-board-border-width: 0.5vw;
+$r-row-height: 9vw;
+$r-final-tile-size-with-border: 8.9vw;
+$r-board-size: 97.9vw;
+$r-rack-tile-size: 13vw;
+$r-rack-tile-border-width: 0.5vw;
+$r-final-rack-tile-size-with-border: 13.5vw;
+$r-btn-space: 4vw;
+$r-btn-width: $r-board-size / 2 - $r-btn-space / 2;
+$r-btn-height: $r-final-rack-tile-size-with-border;
+
 @mixin coloredSquare($size, $color) {
   width: $size;
   height: $size;
@@ -111,6 +130,11 @@ body {
       overflow: hidden;
       padding-bottom: 50px;
       margin-bottom: -30px;
+      @media screen and (max-width: 990px) {
+        min-height: 10vw;
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
 
       .logo-right {
         position: absolute;
@@ -119,6 +143,9 @@ body {
         width: 75%;
         transform: rotate(20deg);
         margin: 0 auto 0 -90%;
+        @media screen and (max-width: 990px) {
+          display: none;
+        }
       }
 
       .logo-left {
@@ -128,6 +155,9 @@ body {
         width: 75%;
         transform: rotate(-10deg);
         margin: 0 auto 0 20%;
+        @media screen and (max-width: 990px) {
+          display: none;
+        }
       }
 
       .scrabble-solver {
@@ -140,6 +170,10 @@ body {
           padding-top: 20px;
           color: #FFF;
           z-index: 1;
+          @media screen and (max-width: 990px) {
+            font-size: calc(30px + 6vw);
+            padding-top: 2vw;
+          }
         }
 
         small {
@@ -147,6 +181,10 @@ body {
           font-size: 22px;
           line-height: 45px;
           color: $color-subtitle;
+          @media screen and (max-width: 990px) {
+            font-size: calc(12px + 1.2vw);
+            line-height: 4.5vw;
+          }
         }
       }
     }
@@ -159,38 +197,77 @@ body {
       padding-top: 10px;
     }
 
-    .container {
+    .container-fluid {
+
       background-color: #fff;
       height: 100%;
-      padding-bottom: 50px;
+      padding-bottom: 150px;
+
+      @media screen and (min-width: 1200px) {
+        max-width: 1200px;
+      }
 
       h3 {
         margin-bottom: 30px;
+        @media screen and (max-width: 990px) {
+          margin-bottom: 3vw;
+        }
       }
 
-
-      #scrabble-board:before {
-        content: "";
+      .arrow {
         position: absolute;
-        top: -20px;
-        bottom: -20px;
-        left: -20px;
-        right: -20px;
-        z-index: 0;
-        background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
+        width: 50%;
+        top: 50px;
+        left: 0;
+        @media screen and (max-width: 990px) {
+          display: none;
+        }
+      }
+
+      .col {
+        @media screen and (max-width: 990px) {
+          margin: 0;
+          padding: 0;
+        }
       }
 
       #scrabble-board {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -20px;
+          bottom: -20px;
+          left: -20px;
+          right: -20px;
+          @media screen and (max-width: 990px) {
+            top: -1.05vw;
+            bottom: -2.1vw;
+            left: -1.05vw;
+            right: -1.05vw;
+          }
+          z-index: 0;
+          background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
+        }
+
         @include coloredSquare($board-size, $board-color);
         width: $board-size;
         height: $board-size;
         margin: auto;
+
+        @media screen and (max-width: 990px) {
+          @include coloredSquare($r-board-size, $board-color);
+          width: $r-board-size;
+          height: $r-board-size;
+        }
 
         .scrabble-board {
           background-color: $board-color;
 
           .scrabble-row {
             height: $row-height;
+            @media screen and (max-width: 990px) {
+              height: $r-row-height;
+            }
 
             .scrabble-tile {
               @include gradiantSquare($final-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);
@@ -200,6 +277,12 @@ body {
               font: $tile-font;
               color: $decal-font-color;
               border-radius: $tile-size * 20 / 100;
+              @media screen and (max-width: 990px) {
+                @include gradiantSquare($r-final-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);
+                border: solid $tile-border-color 2px;
+                border-radius: $r-tile-size * 20 / 100;
+                font-size: 1.8vw;
+              }
 
               &::after {
                 @include coloredSquare(33%, transparent);
@@ -211,6 +294,11 @@ body {
                 line-height: 140%;
                 text-align: right;
                 z-index: 999;
+                @media screen and (max-width: 990px) {
+                  bottom: 2%;
+                  right: 10%;
+                  font-size: 2vw;
+                }
               }
 
               &.scrabble-tile-ct {
@@ -219,22 +307,10 @@ body {
                 .scrabble-decal::before {
                   content: '\2605';
                   font-size: 150%;
-                }
-              }
-
-              &.scrabble-tile-ld, &.scrabble-tile-md, &.scrabble-tile-mt, &.scrabble-tile-lt {
-                .scrabble-decal {
-                  &::before, &::after {
-                    content: '';
-                    position: absolute;
-                    top: -$tile-border-width * 2;
-                    height: calc(100% + #{$tile-border-width} * 4);
-                    z-index: 999;
-                    transform: scaleX(0.7);
-                  }
-
-                  &::after {
-                    transform: scaleY(0.7) rotate(90deg);
+                  @media screen and (max-width: 990px) {
+                    font-size: 5vw;
+                    top: 0.5vw;
+                    position: relative;
                   }
                 }
               }
@@ -270,6 +346,10 @@ body {
                 cursor: pointer;
                 font-size: 135%;
                 font-weight: bold;
+                @media screen and (max-width: 990px) {
+                  line-height: $r-tile-size;
+                  font-size: 2vw;
+                }
               }
 
               input {
@@ -280,6 +360,9 @@ body {
                 color: transparent;
                 top: 0;
                 left: 0;
+                @media screen and (max-width: 990px) {
+                  font-size: 4.32vw;
+                }
 
                 &:focus {
                   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
@@ -327,132 +410,216 @@ body {
         }
       }
 
-      #scrabble-rack:before {
-        content: "";
-        position: absolute;
-        top: -20px;
-        bottom: -20px;
-        left: -20px;
-        right: -20px;
-        background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
-      }
-
       #scrabble-rack {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -20px;
+          bottom: -20px;
+          left: -20px;
+          right: -20px;
+          background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
+          @media screen and (max-width: 990px) {
+            top: -1.05vw;
+            bottom: -2.1vw;
+            left: -1.05vw;
+            right: -1.05vw;
+          }
+        }
+
         @include coloredSquare($board-size, $board-color);
         width: $board-size;
         height: $final-rack-tile-size-with-border;
-        margin: 31px auto 50px auto;
+        margin: 31px auto 28px auto;
         text-align: center;
+        @media screen and (max-width: 990px) {
+          width: $r-board-size;
+          height: $r-final-rack-tile-size-with-border;
+          margin: 2.1vw auto 1.05vw auto;
+          padding-bottom: 2.1vw;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
 
-        .scrabble-tile {
-          @include gradiantSquare($final-rack-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);
-          box-shadow: inset 2px 2px 2px $tile-color-gradiant-up;
-          display: inline-block;
-          font: $tile-font;
-          color: $decal-font-color;
-          border-radius: $rack-tile-size * 20 / 100;
-          margin-left: 1px;
-          margin-right: 1px;
+        .scrabble-rack {
 
-          &::after {
-            @include coloredSquare(33%, transparent);
-            content: attr(data-value);
-            position: absolute;
-            bottom: 0;
-            right: 10px;
-            line-height: 140%;
-            text-align: right;
-            z-index: 999;
+          @media screen and (max-width: 990px) {
+            margin-top: 5.1vw;
           }
 
-          .scrabble-decal {
-            @include coloredSquare(100%, transparent);
-            position: absolute;
-            text-align: center;
-            line-height: $rack-tile-size;
-            text-transform: uppercase;
-            border-radius: 12%;
-            overflow: visible;
-            cursor: pointer;
-            font-size: 135%;
-            font-weight: bold;
-          }
+          .scrabble-tile {
+            @include gradiantSquare($final-rack-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);
+            box-shadow: inset 2px 2px 2px $tile-color-gradiant-up;
+            display: inline-block;
+            font: $tile-font;
+            color: $decal-font-color;
+            border-radius: $rack-tile-size * 20 / 100;
+            margin-left: 1px;
+            margin-right: 1px;
 
-          input {
-            @extend .scrabble-decal;
-            font-size: 250%;
-            text-align: center;
-            z-index: 999;
-            color: transparent;
-            top: 0;
-            left: 0;
-
-            &:focus {
-              background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
+            @media screen and (max-width: 990px) {
+              @include gradiantSquare($r-final-rack-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);
+              border-radius: $r-rack-tile-size * 20 / 100;
+              margin-left: 0.2vw;
+              margin-right: 0.2vw;
+              font-size: 3vw;
             }
 
-            &.scrabble-filled {
-              box-shadow: inset 2px 2px 2px #ee972c;
-              background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
-              text-shadow: 0px -1px 0px $decal-font-color;
+            &::after {
+              @include coloredSquare(33%, transparent);
+              content: attr(data-value);
+              position: absolute;
+              bottom: 0;
+              right: 10px;
+              line-height: 140%;
+              text-align: right;
+              z-index: 999;
+              @media screen and (max-width: 990px) {
+                right: 2vw;
+                line-height: 3.4vw;
+              }
+            }
+
+            .scrabble-decal {
+              @include coloredSquare(100%, transparent);
+              position: absolute;
+              text-align: center;
+              line-height: $rack-tile-size;
+              text-transform: uppercase;
+              border-radius: 12%;
+              overflow: visible;
+              cursor: pointer;
+              font-size: 135%;
+              font-weight: bold;
+              @media screen and (max-width: 990px) {
+                line-height: $r-rack-tile-size;
+                font-size: 2vw;
+              }
+            }
+
+            input {
+              @extend .scrabble-decal;
+              font-size: 250%;
+              text-align: center;
+              z-index: 999;
+              color: transparent;
+              top: 0;
+              left: 0;
+              @media screen and (max-width: 990px) {
+                font-size: 6.5vw;
+              }
 
               &:focus {
-                background-image: repeating-linear-gradient(45deg, $filled-color-gradiant-down, $filled-color-gradiant-down 10px, $filled-color-gradiant-up 10px, $filled-color-gradiant-up 20px);
+                background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1) 10px, rgba(0, 0, 0, 0) 10px, rgba(0, 0, 0, 0) 20px);
               }
 
-              &.best-move {
-                box-shadow: inset 2px 2px 2px #688f22;
-                background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
+              &.scrabble-filled {
+                box-shadow: inset 2px 2px 2px #ee972c;
+                background: linear-gradient($filled-color-gradiant-up, 20%, $filled-color-gradiant-down);
+                text-shadow: 0px -1px 0px $decal-font-color;
 
                 &:focus {
-                  background-image: repeating-linear-gradient(45deg, $filled-best-move-color-gradiant-up, $filled-best-move-color-gradiant-up 10px, $filled-best-move-color-gradiant-down 10px, $filled-best-move-color-gradiant-down 20px);
+                  background-image: repeating-linear-gradient(45deg, $filled-color-gradiant-down, $filled-color-gradiant-down 10px, $filled-color-gradiant-up 10px, $filled-color-gradiant-up 20px);
                 }
-              }
 
-              &.best-move-joker {
-                box-shadow: inset 2px 2px 2px $filled-best-move-joker-color-box-shadow;
-                background: linear-gradient($filled-best-move-joker-color-gradiant-up, 20%, $filled-best-move-joker-color-gradiant-down);
+                &.best-move {
+                  box-shadow: inset 2px 2px 2px #688f22;
+                  background: linear-gradient($filled-best-move-color-gradiant-up, 20%, $filled-best-move-color-gradiant-down);
 
-                &:focus {
-                  background-image: repeating-linear-gradient(45deg, $filled-best-move-joker-color-gradiant-up, $filled-best-move-joker-color-gradiant-up 10px, $filled-best-move-joker-color-gradiant-down 10px, $filled-best-move-joker-color-gradiant-down 20px);
+                  &:focus {
+                    background-image: repeating-linear-gradient(45deg, $filled-best-move-color-gradiant-up, $filled-best-move-color-gradiant-up 10px, $filled-best-move-color-gradiant-down 10px, $filled-best-move-color-gradiant-down 20px);
+                  }
+                }
+
+                &.best-move-joker {
+                  box-shadow: inset 2px 2px 2px $filled-best-move-joker-color-box-shadow;
+                  background: linear-gradient($filled-best-move-joker-color-gradiant-up, 20%, $filled-best-move-joker-color-gradiant-down);
+
+                  &:focus {
+                    background-image: repeating-linear-gradient(45deg, $filled-best-move-joker-color-gradiant-up, $filled-best-move-joker-color-gradiant-up 10px, $filled-best-move-joker-color-gradiant-down 10px, $filled-best-move-joker-color-gradiant-down 20px);
+                  }
                 }
               }
             }
           }
         }
       }
-    }
 
-    .arrow {
-      position: absolute;
-      width: 50%;
-      top: 50px;
-      left: 0;
-      @media screen and (max-width: 990px) {
-        display: none;
+      #scrabble-buttons {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -20px;
+          bottom: -20px;
+          left: -20px;
+          right: -20px;
+          @media screen and (max-width: 990px) {
+            top: -2.1vw;
+            bottom: -2.1vw;
+            left: -1.05vw;
+            right: -1.05vw;
+          }
+          z-index: 0;
+          background: repeating-linear-gradient(45deg, $header-color-gradiant-left 0px, $header-color-gradiant-left 20px, #2666ae 20px, #2666ae 40px);
+        }
+
+        width: $board-size;
+        margin: -16px auto auto;
+        display: flex;
+
+        @media screen and (max-width: 990px) {
+          width: $r-board-size;
+          margin: 2.75vw auto auto;
+        }
+
+        .scrabble-button {
+          width: $btn-width;
+          height: $btn-height;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+          font-size: 150%;
+
+          @media screen and (max-width: 990px) {
+            width: $r-btn-width;
+            height: $r-btn-height;
+            font-size: 6vw;
+          }
+
+          &.btn-warning {
+            margin-right: $btn-space / 4;
+            margin-left: $btn-space / 4;
+            color: $decal-font-color;
+            font-weight: 700;
+            box-shadow: inset 2px 2px 2px $mt-color-gradiant-up;
+            background: linear-gradient($mt-color-gradiant-up, 15%, $mt-color-gradiant-down, 95%, $mt-color-gradiant-up);
+
+            @media screen and (max-width: 990px) {
+              margin-right: $r-btn-space / 4;
+              margin-left: $r-btn-space / 4;
+            }
+          }
+
+          &.btn-primary {
+            margin-right: $btn-space / 4;
+            margin-left: $btn-space / 4;
+            color: $decal-font-color;
+            font-weight: 700;
+            box-shadow: inset 2px 2px 2px $lt-color-gradiant-up;
+            background: linear-gradient($lt-color-gradiant-up, 15%, $lt-color-gradiant-down, 95%, $lt-color-gradiant-up);
+
+            @media screen and (max-width: 990px) {
+              margin-right: $r-btn-space / 4;
+              margin-left: $r-btn-space / 4;
+            }
+          }
+        }
       }
     }
-
-    .button-row {
-      padding-bottom: 75px;
-
-      .btn-warning {
-        color: $decal-font-color;
-        font-weight: 700;
-        font-size: 22px;
-        box-shadow: inset 2px 2px 2px $mt-color-gradiant-up;
-        background: linear-gradient($mt-color-gradiant-up, 15%, $mt-color-gradiant-down, 95%, $mt-color-gradiant-up);
-      }
-
-      .btn-primary {
-        color: $decal-font-color;
-        font-weight: 700;
-        font-size: 22px;
-        box-shadow: inset 2px 2px 2px $lt-color-gradiant-up;
-        background: linear-gradient($lt-color-gradiant-up, 15%, $lt-color-gradiant-down, 95%, $lt-color-gradiant-up);
-      }
-    }
-
   }
 }
 
