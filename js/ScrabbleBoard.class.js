@@ -233,6 +233,9 @@ export class ScrabbleBoard {
                 console.log('input');
                 console.log(oEvent);
                 oSelectedInput.value = oSelectedInput.parentElement.dataset.letter;
+                oEvent.preventDefault();
+                oEvent.stopImmediatePropagation();
+                oEvent.stopPropagation();
             }
         });
         oInputElement.addEventListener('keydown', function (oEvent) {
