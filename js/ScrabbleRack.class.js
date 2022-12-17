@@ -142,10 +142,13 @@ export class ScrabbleRack {
                 }
             }
         });
-        oRackInputElement.addEventListener('input', function () {
+        oRackInputElement.addEventListener('input', function (oEvent) {
             const oSelectedInput = this;
             if (oSelectedInput.value.length > 1) {
                 oSelectedInput.value = oSelectedInput.parentElement.dataset.letter;
+                oEvent.preventDefault();
+                oEvent.stopImmediatePropagation();
+                oEvent.stopPropagation();
             }
         });
         oRackInputElement.addEventListener('keydown', function (oEvent) {

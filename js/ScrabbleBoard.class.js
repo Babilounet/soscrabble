@@ -224,14 +224,10 @@ export class ScrabbleBoard {
         });
         oInputElement.addEventListener('textInput', function (oEvent) {
             oEvent.preventDefault();
-            console.log('textInput');
-            console.log(oEvent);
         });
         oInputElement.addEventListener('input', function (oEvent) {
             const oSelectedInput = this;
             if (oSelectedInput.value.length > 1) {
-                console.log('input');
-                console.log(oEvent);
                 oSelectedInput.value = oSelectedInput.parentElement.dataset.letter;
                 oEvent.preventDefault();
                 oEvent.stopImmediatePropagation();
