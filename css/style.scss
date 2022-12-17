@@ -458,6 +458,7 @@ body {
             border-radius: $rack-tile-size * 20 / 100;
             margin-left: 1px;
             margin-right: 1px;
+            z-index: 100;
 
             @media screen and (max-width: 990px) {
               @include gradiantSquare($r-final-rack-tile-size-with-border, $tile-color-gradiant-up, $tile-color-gradiant-down);

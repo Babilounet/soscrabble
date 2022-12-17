@@ -363,6 +363,7 @@ body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-ti
   border-radius: 15.6px;
   margin-left: 1px;
   margin-right: 1px;
+  z-index: 100;
 }
 @media screen and (max-width: 990px) {
   body .page-container .container-fluid #scrabble-rack .scrabble-rack .scrabble-tile {
