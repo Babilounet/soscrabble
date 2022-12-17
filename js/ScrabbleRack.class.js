@@ -142,7 +142,7 @@ export class ScrabbleRack {
                 }
             }
         });
-        oInputElement.addEventListener('input', function () {
+        oRackInputElement.addEventListener('input', function () {
             const oSelectedInput = this;
             if (oSelectedInput.value.length > 1) {
                 oSelectedInput.value = oSelectedInput.parent.dataset.letter;
