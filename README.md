@@ -29,6 +29,16 @@ https://www.soscrabble.xyz
 ![App Screenshot](https://snipboard.io/ijweu0.jpg)
 
 
+## ToDo & Improvements
+
+* Add option to choose between 11x11 and 15x15 boards
+* Add option to choose between different dictionnaries
+* Add I18N
+* Add display of points value for the current move
+* Add possibility to choose between the best move and other possible top moves
+* Improve responsive view and rack management on mobile divices
+
+
 ## License
 
 [GNU GPL V3.0](https://choosealicense.com/licenses/gpl-3.0/)
