@@ -21,7 +21,7 @@ SoScrabble is a project aiming to provide an easy and ergonomic way to cheat in 
 
 ## Currently available
 
-https://www.soscrabble.xyz
+https://soscrabble.vercel.app
 
 
 ## Screenshots
